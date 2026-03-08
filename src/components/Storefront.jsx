@@ -164,6 +164,22 @@ const Storefront = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Footer */}
+            <footer className="bg-[#4A3B32] text-[#FAF8F5] py-12 px-6">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <div className="text-xl font-black tracking-tighter mb-1">Dear Sweet LLC</div>
+                        <p className="text-[#FAF8F5]/50 text-sm font-medium">Orange County, California</p>
+                    </div>
+                    <nav className="flex items-center gap-8 text-sm font-bold text-[#FAF8F5]/60">
+                        <button onClick={() => navigate('/privacy')} className="hover:text-[#FAF8F5] transition-colors">Privacy Policy</button>
+                        <button onClick={() => navigate('/terms')} className="hover:text-[#FAF8F5] transition-colors">Terms & Conditions</button>
+                        <button onClick={() => navigate('/order')} className="hover:text-[#FAF8F5] transition-colors">Order Inquiry</button>
+                    </nav>
+                    <p className="text-[#FAF8F5]/30 text-xs font-medium">© {new Date().getFullYear()} Dear Sweet LLC. All rights reserved.</p>
+                </div>
+            </footer>
         </div>
     );
 };

@@ -9,6 +9,8 @@ import CostCalculator from './components/CostCalculator';
 import Storefront from './components/Storefront';
 import Order from './components/Order';
 import AdminLogin from './components/AdminLogin';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import Terms from './components/Terms';
 import { LayoutDashboard, ShoppingCart, Box, Receipt, Calculator, Menu, X, Bell } from 'lucide-react';
 import { DataProvider, useData } from './context/DataContext';
 
@@ -163,6 +165,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Storefront />} />
                 <Route path="/order" element={<Order />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<Terms />} />
                 <Route
                     path="/admin"
                     element={
