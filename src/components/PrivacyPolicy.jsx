@@ -26,7 +26,7 @@ const PrivacyPolicy = () => {
 
                         <section className="space-y-3">
                             <h2 className="text-xl font-black text-[#4A3B32]">1. Who We Are</h2>
-                            <p>Dear Sweet LLC ("we," "our," or "us") is a small-batch artisan cookie company based in Orange County, California. We are committed to protecting your personal information and your right to privacy.</p>
+                            <p>Dear Sweet LLC ("we," "our," or "us") is a small-batch artisan bakery based in Orange County, California, specializing in the trending <strong>chocolate bar dubai</strong> style cookies. We are committed to protecting your personal information and your right to privacy.</p>
                         </section>
 
                         <section className="space-y-3">
@@ -56,7 +56,7 @@ const PrivacyPolicy = () => {
 
                         <section className="space-y-3">
                             <h2 className="text-xl font-black text-[#4A3B32]">4. Third-Party Services</h2>
-                            <p>We use <strong>EmailJS</strong> to process and deliver order inquiry notifications and confirmation emails. Your submitted information is transmitted through EmailJS solely for the purpose of email delivery. Please refer to <a href="https://www.emailjs.com/legal/privacy-policy/" className="text-[#8FA65B] underline" target="_blank" rel="noopener noreferrer">EmailJS's Privacy Policy</a> for details on how they handle data.</p>
+                            <p>We use <strong>EmailJS</strong> to process and deliver order inquiry notifications and confirmation emails for our <strong>branded chocolates in dubai</strong> inspired treats. Your submitted information is transmitted through EmailJS solely for the purpose of email delivery. Please refer to <a href="https://www.emailjs.com/legal/privacy-policy/" className="text-[#8FA65B] underline" target="_blank" rel="noopener noreferrer">EmailJS's Privacy Policy</a> for details on how they handle data.</p>
                         </section>
 
                         <section className="space-y-3">
@@ -79,6 +79,7 @@ const PrivacyPolicy = () => {
             </main>
 
             <footer className="border-t border-[#4A3B32]/10 py-8 text-center text-[#4A3B32]/40 text-sm font-medium">
+                <p className="mb-2 text-xs opacity-50">Local favorites for chocola dubai, chaclet dubai, and chocolaterie experiences.</p>
                 © {new Date().getFullYear()} Dear Sweet LLC. All rights reserved.
             </footer>
         </div>

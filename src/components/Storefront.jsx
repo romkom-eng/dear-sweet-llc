@@ -61,15 +61,15 @@ const Storefront = () => {
                         {/* Hero Text */}
                         <div className="flex-1 text-center lg:text-left">
                             <motion.div variants={fadeInUp} className="inline-block px-4 py-1.5 rounded-full bg-[#D1D9A7]/30 text-[#4A3B32] font-black text-xs uppercase tracking-[0.2em] mb-6">
-                                The Original
+                                Best Chocolate in Dubai
                             </motion.div>
                             <motion.h1 variants={fadeInUp} className="text-5xl lg:text-7xl font-extrabold text-[#4A3B32] leading-[1.1] tracking-tight mb-8">
-                                The New Standard of<br />
+                                The Original<br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D1D9A7] to-[#8FA65B]">Dubai Chewy Cookies</span>
                             </motion.h1>
                             <motion.p variants={fadeInUp} className="text-lg lg:text-xl text-[#4A3B32]/70 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
                                 Crispy on the outside, delightfully chewy signature marshmallow on the inside.<br />
-                                The perfect harmony of premium roasted pistachio and crispy kadaif.
+                                Experience the ultimate <strong>chocolate bar dubai</strong> phenomenon reimagined with premium roasted pistachio and crispy kadaif.
                             </motion.p>
                             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                                 <button onClick={() => navigate('/order')} className="w-full sm:w-auto px-8 py-5 bg-[#4A3B32] text-[#FAF8F5] rounded-full font-black text-lg hover:shadow-[0_10px_40px_rgba(74,59,50,0.3)] hover:-translate-y-1 transition-all duration-300">
@@ -140,9 +140,9 @@ const Storefront = () => {
             <section id="menu" className="py-32 bg-white px-6">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-20">
-                        <h2 className="text-4xl lg:text-5xl font-extrabold text-[#4A3B32] mb-6">Signature Lineup</h2>
+                        <h2 className="text-4xl lg:text-5xl font-extrabold text-[#4A3B32] mb-6">Our Signature Chocolaterie Lineup</h2>
                         <p className="text-lg text-[#4A3B32]/60 font-medium max-w-2xl mx-auto">
-                            Handcrafted fresh every morning. We perfectly recreated the sweet and crispy Middle Eastern flavors enveloped in our signature chewy marshmallow texture.
+                            Handcrafted fresh every morning at your favorite local <strong>chocolate shop dubai</strong> style. We perfectly recreated the sweet and crispy Middle Eastern flavors enveloped in our signature chewy marshmallow texture.
                         </p>
                     </div>
 

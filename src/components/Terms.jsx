@@ -26,7 +26,7 @@ const Terms = () => {
 
                         <section className="space-y-3">
                             <h2 className="text-xl font-black text-[#4A3B32]">1. Agreement to Terms</h2>
-                            <p>By submitting an order inquiry through the Dear Sweet LLC website, you agree to these Terms & Conditions. These terms apply to all customers and visitors of our site.</p>
+                            <p>By submitting an order inquiry through the Dear Sweet LLC website, your premier destination for the <strong>best chocolate in dubai</strong> inspired treats, you agree to these Terms & Conditions. These terms apply to all customers and visitors of our site.</p>
                         </section>
 
                         <section className="space-y-3">
@@ -35,7 +35,7 @@ const Terms = () => {
                                 <li>All orders are submitted as <strong>inquiries only</strong>. An order is not confirmed until you receive a written confirmation from Dear Sweet LLC.</li>
                                 <li>A minimum order of <strong>15 boxes</strong> is required per transaction.</li>
                                 <li>Orders must be placed at least <strong>3 days in advance</strong> of the requested pickup or delivery date.</li>
-                                <li>Pricing is provided upon inquiry and may vary based on quantity, product selection, and delivery requirements.</li>
+                                <li><strong> दुबई ചോക്ലേറ്റ്  (Dubai chocolate price)</strong> is provided upon inquiry and may vary based on quantity, product selection, and delivery requirements.</li>
                             </ul>
                         </section>
 
@@ -96,6 +96,7 @@ const Terms = () => {
             </main>
 
             <footer className="border-t border-[#4A3B32]/10 py-8 text-center text-[#4A3B32]/40 text-sm font-medium">
+                <p className="mb-2 text-xs opacity-50">Local favorites for chocola dubai, chaclet dubai, and chocolaterie experiences.</p>
                 © {new Date().getFullYear()} Dear Sweet LLC. All rights reserved.
             </footer>
         </div>
