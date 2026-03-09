@@ -94,27 +94,30 @@ const Storefront = () => {
                             </motion.div>
                         </div>
 
-                        {/* Hero Images (Mockup based on user description) */}
-                        <motion.div variants={fadeInUp} className="flex-1 relative w-full aspect-square max-w-[600px] mx-auto">
-                            {/* Original */}
+                        {/* Hero Image — Real Product Photo */}
+                        <motion.div
+                            variants={fadeInUp}
+                            className="flex-1 relative w-full max-w-[520px] mx-auto"
+                        >
                             <motion.div
-                                animate={{ y: [0, -15, 0] }}
+                                animate={{ y: [0, -12, 0] }}
                                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-[#D1D9A7]/20 rounded-full shadow-2xl backdrop-blur-sm border border-[#D1D9A7]/40 flex flex-col items-center justify-center p-6 z-20 group"
+                                className="relative"
                             >
-                                <h3 className="text-2xl font-black text-[#4A3B32] mb-2 text-center">Original<br />Dubai Chewy</h3>
-                                <div className="absolute inset-0 bg-cover bg-center rounded-full opacity-0 group-hover:opacity-10 transition-opacity" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800")' }}></div>
-                                <span className="bg-[#4A3B32] text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mt-4">Pistachio + Kadaif</span>
-                            </motion.div>
-
-                            {/* Strawberry */}
-                            <motion.div
-                                animate={{ y: [0, 15, 0] }}
-                                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                className="absolute bottom-[5%] left-[5%] w-[55%] h-[55%] bg-[#E63946]/10 rounded-full shadow-2xl backdrop-blur-sm border border-[#E63946]/20 flex flex-col items-center justify-center p-6 z-10 group"
-                            >
-                                <h3 className="text-xl font-black text-[#E63946] mb-2 text-center">Strawberry<br />Dubai Chewy</h3>
-                                <span className="bg-[#E63946] text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mt-4">Whole Strawberry</span>
+                                {/* Decorative shadow blob behind the image */}
+                                <div className="absolute inset-0 -bottom-6 scale-90 bg-[#D1D9A7]/60 rounded-[3rem] blur-2xl -z-10"></div>
+                                <img
+                                    src="/cookie-product.png"
+                                    alt="Dubai Chewy Cookies — Original and Strawberry"
+                                    className="w-full rounded-[3rem] shadow-2xl object-cover"
+                                />
+                                {/* Floating badges */}
+                                <div className="absolute -bottom-4 -left-4 bg-[#4A3B32] text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg">
+                                    Pistachio + Kadaif
+                                </div>
+                                <div className="absolute -top-4 -right-4 bg-[#E63946] text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg">
+                                    Whole Strawberry
+                                </div>
                             </motion.div>
                         </motion.div>
                     </motion.div>
