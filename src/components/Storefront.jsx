@@ -94,30 +94,38 @@ const Storefront = () => {
                             </motion.div>
                         </div>
 
-                        {/* Hero Image — Real Product Photo */}
-                        <motion.div
-                            variants={fadeInUp}
-                            className="flex-1 relative w-full max-w-[520px] mx-auto"
-                        >
+                        {/* Hero — Two floating cookie cutouts */}
+                        <motion.div variants={fadeInUp} className="flex-1 relative flex items-end justify-center gap-4 lg:gap-8 pt-8">
+                            {/* Original Cookie */}
                             <motion.div
-                                animate={{ y: [0, -12, 0] }}
-                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                                className="relative"
+                                animate={{ y: [0, -16, 0] }}
+                                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+                                className="relative flex flex-col items-center"
                             >
-                                {/* Decorative shadow blob behind the image */}
-                                <div className="absolute inset-0 -bottom-6 scale-90 bg-[#D1D9A7]/60 rounded-[3rem] blur-2xl -z-10"></div>
                                 <img
-                                    src="/cookie-product.png"
-                                    alt="Dubai Chewy Cookies — Original and Strawberry"
-                                    className="w-full rounded-[3rem] shadow-2xl object-cover"
+                                    src="/cookie-original.png"
+                                    alt="Original Dubai Chewy Cookie"
+                                    className="w-48 lg:w-64 drop-shadow-2xl"
                                 />
-                                {/* Floating badges */}
-                                <div className="absolute -bottom-4 -left-4 bg-[#4A3B32] text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg">
-                                    Pistachio + Kadaif
-                                </div>
-                                <div className="absolute -top-4 -right-4 bg-[#E63946] text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg">
-                                    Whole Strawberry
-                                </div>
+                                <span className="mt-4 bg-[#4A3B32] text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                                    Original
+                                </span>
+                            </motion.div>
+
+                            {/* Strawberry Cookie */}
+                            <motion.div
+                                animate={{ y: [0, 16, 0] }}
+                                transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+                                className="relative flex flex-col items-center"
+                            >
+                                <img
+                                    src="/cookie-strawberry.png"
+                                    alt="Strawberry Dubai Chewy Cookie"
+                                    className="w-52 lg:w-72 drop-shadow-2xl"
+                                />
+                                <span className="mt-4 bg-[#E63946] text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                                    Strawberry
+                                </span>
                             </motion.div>
                         </motion.div>
                     </motion.div>
@@ -139,6 +147,9 @@ const Storefront = () => {
                         <motion.div whileHover={{ y: -10 }} className="bg-[#FAF8F5] rounded-[3rem] p-10 lg:p-14 border border-[#4A3B32]/5 group transition-all duration-500 hover:shadow-[0_20px_60px_rgba(74,59,50,0.05)] relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#D1D9A7]/20 rounded-bl-full -z-0 transition-transform duration-500 group-hover:scale-110"></div>
                             <div className="relative z-10">
+                                <div className="flex justify-center mb-6">
+                                    <img src="/cookie-original.png" alt="Original Dubai Chewy Cookie" className="h-44 drop-shadow-xl group-hover:scale-105 transition-transform duration-500" />
+                                </div>
                                 <h3 className="text-3xl font-black text-[#4A3B32] mb-4">Original<br />Dubai Chewy Cookie</h3>
                                 <p className="text-[#4A3B32]/70 font-medium leading-relaxed mb-8 h-20">
                                     Our original best-seller filled with premium pistachio spread and crispy kadaif, enveloped in fluffy marshmallow.
@@ -154,6 +165,9 @@ const Storefront = () => {
                         <motion.div whileHover={{ y: -10 }} className="bg-[#FAF8F5] rounded-[3rem] p-10 lg:p-14 border border-[#4A3B32]/5 group transition-all duration-500 hover:shadow-[0_20px_60px_rgba(74,59,50,0.05)] relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#E63946]/10 rounded-bl-full -z-0 transition-transform duration-500 group-hover:scale-110"></div>
                             <div className="relative z-10">
+                                <div className="flex justify-center mb-6">
+                                    <img src="/cookie-strawberry.png" alt="Strawberry Dubai Chewy Cookie" className="h-44 drop-shadow-xl group-hover:scale-105 transition-transform duration-500" />
+                                </div>
                                 <h3 className="text-3xl font-black text-[#4A3B32] mb-4">Strawberry<br />Dubai Chewy Cookie</h3>
                                 <p className="text-[#4A3B32]/70 font-medium leading-relaxed mb-8 h-20">
                                     The perfect balance of sweet and crispy original flavors with a hidden whole strawberry inside for a refreshing burst of juice.
