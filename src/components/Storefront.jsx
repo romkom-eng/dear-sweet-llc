@@ -105,7 +105,7 @@ const Storefront = () => {
                                 <img
                                     src="/cookie-original.png"
                                     alt="Original Dubai Chewy Cookie"
-                                    className="w-48 lg:w-64 drop-shadow-2xl"
+                                    className="w-48 lg:w-64 drop-shadow-2xl mix-blend-multiply"
                                 />
                                 <span className="mt-4 bg-[#4A3B32] text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
                                     Original
@@ -121,7 +121,7 @@ const Storefront = () => {
                                 <img
                                     src="/cookie-strawberry.png"
                                     alt="Strawberry Dubai Chewy Cookie"
-                                    className="w-52 lg:w-72 drop-shadow-2xl"
+                                    className="w-52 lg:w-72 drop-shadow-2xl mix-blend-multiply"
                                 />
                                 <span className="mt-4 bg-[#E63946] text-white text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
                                     Strawberry
@@ -148,7 +148,7 @@ const Storefront = () => {
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#D1D9A7]/20 rounded-bl-full -z-0 transition-transform duration-500 group-hover:scale-110"></div>
                             <div className="relative z-10">
                                 <div className="flex justify-center mb-6">
-                                    <img src="/cookie-original.png" alt="Original Dubai Chewy Cookie" className="h-44 drop-shadow-xl group-hover:scale-105 transition-transform duration-500" />
+                                    <img src="/cookie-original.png" alt="Original Dubai Chewy Cookie" className="h-44 drop-shadow-xl group-hover:scale-105 transition-transform duration-500 mix-blend-multiply" />
                                 </div>
                                 <h3 className="text-3xl font-black text-[#4A3B32] mb-4">Original<br />Dubai Chewy Cookie</h3>
                                 <p className="text-[#4A3B32]/70 font-medium leading-relaxed mb-8 h-20">
@@ -166,7 +166,7 @@ const Storefront = () => {
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#E63946]/10 rounded-bl-full -z-0 transition-transform duration-500 group-hover:scale-110"></div>
                             <div className="relative z-10">
                                 <div className="flex justify-center mb-6">
-                                    <img src="/cookie-strawberry.png" alt="Strawberry Dubai Chewy Cookie" className="h-44 drop-shadow-xl group-hover:scale-105 transition-transform duration-500" />
+                                    <img src="/cookie-strawberry.png" alt="Strawberry Dubai Chewy Cookie" className="h-44 drop-shadow-xl group-hover:scale-105 transition-transform duration-500 mix-blend-multiply" />
                                 </div>
                                 <h3 className="text-3xl font-black text-[#4A3B32] mb-4">Strawberry<br />Dubai Chewy Cookie</h3>
                                 <p className="text-[#4A3B32]/70 font-medium leading-relaxed mb-8 h-20">
