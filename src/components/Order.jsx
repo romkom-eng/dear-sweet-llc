@@ -34,7 +34,7 @@ const Order = () => {
         setIsSending(true);
 
         const SERVICE_ID = 'service_glti2i5';
-        const TEMPLATE_ID = 'template_jfvypru';
+        const TEMPLATE_ID = 'template_i69i2pi';
         const PUBLIC_KEY = 'ZKLV3o3AltwRoZ2-_';
 
         const templateParams = {
