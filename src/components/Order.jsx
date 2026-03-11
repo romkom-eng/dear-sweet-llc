@@ -21,7 +21,7 @@ const Order = () => {
         product: 'Original Dubai Chewy',
         quantity: '15 Boxes (Minimum)',
         date: getMinDate(),
-        time: '12:00 PM',
+        time: '12:00',
         details: ''
     });
 
