@@ -20,7 +20,7 @@ const Order = () => {
         phone: '',
         product: 'Original Dubai Chewy',
         quantity: '15 Boxes (Minimum)',
-        location: 'Irvine, CA (HQ)',
+        location: 'Irvine',
         date: getMinDate(),
         time: '12:00',
         details: ''
@@ -188,11 +188,12 @@ const Order = () => {
                                     onChange={handleChange}
                                     className="w-full h-14 bg-[#FAF8F5] rounded-2xl px-6 text-[#4A3B32] font-bold focus:outline-none focus:ring-2 focus:ring-[#D1D9A7] transition-all appearance-none"
                                 >
-                                    <option>Irvine, CA (HQ)</option>
-                                    <option>Newport Beach, CA</option>
-                                    <option>Costa Mesa, CA</option>
-                                    <option>Tustin, CA</option>
-                                    <option>Santa Ana, CA</option>
+                                    <option>Irvine</option>
+                                    <option>Costa Mesa</option>
+                                    <option>Tustin</option>
+                                    <option>Santa Ana</option>
+                                    <option>Buena Park</option>
+                                    <option>LA Korea town</option>
                                 </select>
                             </div>
                         </div>
