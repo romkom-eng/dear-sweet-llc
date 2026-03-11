@@ -33,11 +33,8 @@ const Order = () => {
         e.preventDefault();
         setIsSending(true);
 
-        // NOTE: Make sure to replace these placeholder strings with your actual EmailJS IDs!
-        // To get these IDs, sign up at https://www.emailjs.com/
-        const SERVICE_ID = 'YOUR_EMAILJS_SERVICE_ID';
-        const ADMIN_TEMPLATE_ID = 'template_i69i2pi';
-        const CUSTOMER_TEMPLATE_ID = 'YOUR_CUSTOMER_TEMPLATE_ID';
+        const SERVICE_ID = 'service_glti2i5';
+        const TEMPLATE_ID = 'template_jfvypru';
         const PUBLIC_KEY = 'ZKLV3o3AltwRoZ2-_';
 
         const templateParams = {
@@ -52,16 +49,11 @@ const Order = () => {
         };
 
         try {
-            // 1. Send Notification Email to Admin
-            await emailjs.send(SERVICE_ID, ADMIN_TEMPLATE_ID, templateParams, PUBLIC_KEY);
-            // 2. Send Confirmation Email to Customer
-            await emailjs.send(SERVICE_ID, CUSTOMER_TEMPLATE_ID, templateParams, PUBLIC_KEY);
-
+            await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
             setIsSubmitted(true);
         } catch (error) {
             console.error('Email sending failed:', error);
-            // Even if EmailJS isn't configured yet, let's show success for MVP UI simulation
-            setIsSubmitted(true);
+            alert("Sorry, there was an error sending your request. Please try again or contact us directly.");
         } finally {
             setIsSending(false);
         }
