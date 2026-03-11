@@ -20,6 +20,7 @@ const Order = () => {
         phone: '',
         product: 'Original Dubai Chewy',
         quantity: '15 Boxes (Minimum)',
+        location: 'Irvine, CA (HQ)',
         date: getMinDate(),
         time: '12:00',
         details: ''
@@ -43,6 +44,7 @@ const Order = () => {
             phone: formData.phone,
             product: formData.product,
             quantity: formData.quantity,
+            pickup_location: formData.location,
             pickup_date: formData.date,
             pickup_time: formData.time,
             message: formData.details
@@ -163,7 +165,7 @@ const Order = () => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-3">
                                 <label className="text-xs font-black text-[#4A3B32]/40 uppercase tracking-widest">Estimated Quantity</label>
                                 <select
@@ -178,6 +180,24 @@ const Order = () => {
                                     <option>60+ Boxes (Event)</option>
                                 </select>
                             </div>
+                            <div className="space-y-3">
+                                <label className="text-xs font-black text-[#4A3B32]/40 uppercase tracking-widest">Pickup Neighborhood</label>
+                                <select
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    className="w-full h-14 bg-[#FAF8F5] rounded-2xl px-6 text-[#4A3B32] font-bold focus:outline-none focus:ring-2 focus:ring-[#D1D9A7] transition-all appearance-none"
+                                >
+                                    <option>Irvine, CA (HQ)</option>
+                                    <option>Newport Beach, CA</option>
+                                    <option>Costa Mesa, CA</option>
+                                    <option>Tustin, CA</option>
+                                    <option>Santa Ana, CA</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-3">
                                 <label className="text-xs font-black text-[#4A3B32]/40 uppercase tracking-widest">Pickup Date</label>
                                 <input
