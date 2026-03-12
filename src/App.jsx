@@ -6,11 +6,17 @@ import SalesInput from './components/SalesInput';
 import InventoryBoard from './components/InventoryBoard';
 import ExpenseTracker from './components/ExpenseTracker';
 import CostCalculator from './components/CostCalculator';
-import Storefront from './components/Storefront';
+import Storefront from './components/Storefront'; // keeping for reference if needed, but Home is used
 import Order from './components/Order';
 import AdminLogin from './components/AdminLogin';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Terms from './components/Terms';
+import Home from './components/Home';
+import MenuPage from './components/Menu'; // Renamed import to avoid conflict with lucide Menu
+import Story from './components/Story';
+import ProductDetail from './components/ProductDetail';
+import Layout from './components/Layout';
+import { CartProvider } from './context/CartContext';
 import { LayoutDashboard, ShoppingCart, Box, Receipt, Calculator, Menu, X, Bell } from 'lucide-react';
 import { DataProvider, useData } from './context/DataContext';
 
@@ -162,20 +168,27 @@ function App() {
 
     return (
         <DataProvider>
-            <Routes>
-                <Route path="/" element={<Storefront />} />
-                <Route path="/order" element={<Order />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route
-                    path="/admin"
-                    element={
-                        isAdminAuthenticated ?
-                            <AppContent /> :
-                            <AdminLogin onLogin={() => setIsAdminAuthenticated(true)} />
-                    }
-                />
-            </Routes>
+            <CartProvider>
+                <Routes>
+                    <Route element={<Layout />}>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/menu" element={<MenuPage />} />
+                        <Route path="/story" element={<Story />} />
+                        <Route path="/product/:id" element={<ProductDetail />} />
+                        <Route path="/order" element={<Order />} />
+                        <Route path="/privacy" element={<PrivacyPolicy />} />
+                        <Route path="/terms" element={<Terms />} />
+                    </Route>
+                    <Route
+                        path="/admin"
+                        element={
+                            isAdminAuthenticated ?
+                                <AppContent /> :
+                                <AdminLogin onLogin={() => setIsAdminAuthenticated(true)} />
+                        }
+                    />
+                </Routes>
+            </CartProvider>
         </DataProvider>
     );
 }
