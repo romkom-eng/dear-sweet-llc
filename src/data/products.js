@@ -1,0 +1,41 @@
+// ─── Dear Sweet LLC — Static Product Catalog ───────────────────────────────
+// To add/edit products, update this file.
+// stripeLink: paste your Stripe Payment Link URL here when ready.
+// ────────────────────────────────────────────────────────────────────────────
+
+export const PRODUCTS = [
+    {
+        id: 'original-dubai-chewy',
+        title: 'Original Dubai Chewy Cookie',
+        subtitle: 'The Classic',
+        price: 7.00,
+        description:
+            'The cookie that started it all. Premium kataifi (kunafa) pastry layered with authentic Dubai chocolate and Callebaut milk chocolate, all wrapped in a golden, chewy shell. Every bite melts into a rich, nutty sweetness you can\'t find anywhere else.',
+        tags: ['Best Seller', 'Original', 'Milk Chocolate'],
+        image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&q=85&auto=format',
+        stripeLink: null, // e.g. 'https://buy.stripe.com/XXXXX'
+        variants: [
+            { id: 'original-1', label: '1 Cookie', price: 7.00 },
+            { id: 'original-6', label: '6-Pack Box', price: 39.99 },
+            { id: 'original-12', label: '12-Pack Box', price: 74.99 },
+        ],
+    },
+    {
+        id: 'strawberry-dubai-chewy',
+        title: 'Strawberry Dubai Chewy Cookie',
+        subtitle: 'Fan Favorite',
+        price: 8.00,
+        description:
+            'A sweet twist on the original. Fresh strawberry cream layered with our signature kunafa pastry and white chocolate, wrapped in a chewy golden shell. Fruity, rich, and completely irresistible.',
+        tags: ['Fan Favorite', 'Strawberry', 'White Chocolate'],
+        image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=85&auto=format',
+        stripeLink: null,
+        variants: [
+            { id: 'strawberry-1', label: '1 Cookie', price: 8.00 },
+            { id: 'strawberry-6', label: '6-Pack Box', price: 44.99 },
+            { id: 'strawberry-12', label: '12-Pack Box', price: 84.99 },
+        ],
+    },
+];
+
+export const getProductById = (id) => PRODUCTS.find(p => p.id === id);

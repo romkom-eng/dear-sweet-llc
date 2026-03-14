@@ -12,11 +12,13 @@ import AdminLogin from './components/AdminLogin';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Terms from './components/Terms';
 import Home from './components/Home';
-import MenuPage from './components/Menu'; // Renamed import to avoid conflict with lucide Menu
+import MenuPage from './components/Menu';
 import Story from './components/Story';
 import ProductDetail from './components/ProductDetail';
 import Layout from './components/Layout';
+import AdminProducts from './components/admin/AdminProducts';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { LayoutDashboard, ShoppingCart, Box, Receipt, Calculator, Menu, X, Bell } from 'lucide-react';
 import { DataProvider, useData } from './context/DataContext';
 
@@ -163,33 +165,56 @@ const AppContent = () => {
     );
 };
 
-function App() {
+function AdminRoute() {
+    const { user, isAdmin } = useAuth();
     const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+    const [adminTab, setAdminTab] = useState('dashboard');
+
+    const authenticated = isAdminAuthenticated || isAdmin;
+
+    if (!authenticated) {
+        return <AdminLogin onLogin={() => setIsAdminAuthenticated(true)} />;
+    }
 
     return (
+        <div style={{ display: 'flex', height: '100vh' }}>
+            {/* existing admin sidebar + content */}
+            <AppContent />
+        </div>
+    );
+}
+
+function App() {
+    return (
         <DataProvider>
-            <CartProvider>
-                <Routes>
-                    <Route element={<Layout />}>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/menu" element={<MenuPage />} />
-                        <Route path="/story" element={<Story />} />
-                        <Route path="/product/:id" element={<ProductDetail />} />
-                        <Route path="/order" element={<Order />} />
-                        <Route path="/privacy" element={<PrivacyPolicy />} />
-                        <Route path="/terms" element={<Terms />} />
-                    </Route>
-                    <Route
-                        path="/admin"
-                        element={
-                            isAdminAuthenticated ?
-                                <AppContent /> :
-                                <AdminLogin onLogin={() => setIsAdminAuthenticated(true)} />
-                        }
-                    />
-                </Routes>
-            </CartProvider>
+            <AuthProvider>
+                <CartProvider>
+                    <Routes>
+                        <Route element={<Layout />}>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/menu" element={<MenuPage />} />
+                            <Route path="/story" element={<Story />} />
+                            <Route path="/product/:id" element={<ProductDetail />} />
+                            <Route path="/order" element={<Order />} />
+                            <Route path="/privacy" element={<PrivacyPolicy />} />
+                            <Route path="/terms" element={<Terms />} />
+                        </Route>
+                        <Route path="/admin" element={<AdminRoute />} />
+                        <Route path="/admin/products" element={<AdminProductsPage />} />
+                    </Routes>
+                </CartProvider>
+            </AuthProvider>
         </DataProvider>
+    );
+}
+
+function AdminProductsPage() {
+    const { isAdmin } = useAuth();
+    if (!isAdmin) return <div style={{ padding: 40, fontFamily: 'sans-serif' }}>Access denied.</div>;
+    return (
+        <div style={{ background: '#FDF6EC', minHeight: '100vh', padding: '40px 32px', maxWidth: 1000, margin: '0 auto' }}>
+            <AdminProducts />
+        </div>
     );
 }
 

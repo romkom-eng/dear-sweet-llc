@@ -1,89 +1,64 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import client from '../services/shopify';
+import React, { createContext, useContext, useState } from 'react';
 
 const CartContext = createContext();
 
-export const useCart = () => useContext(CartContext);
-
-export const CartProvider = ({ children }) => {
-    const [checkout, setCheckout] = useState(null);
+export function CartProvider({ children }) {
+    const [items, setItems] = useState([]); // [{ product, variant, quantity }]
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [isInitializing, setIsInitializing] = useState(true);
-
-    useEffect(() => {
-        const initializeCheckout = async () => {
-            try {
-                const checkoutId = localStorage.getItem('shopify_checkout_id');
-                if (checkoutId) {
-                    const existingCheckout = await client.checkout.fetch(checkoutId);
-                    if (existingCheckout && !existingCheckout.completedAt) {
-                        setCheckout(existingCheckout);
-                    } else {
-                        const newCheckout = await client.checkout.create();
-                        localStorage.setItem('shopify_checkout_id', newCheckout.id);
-                        setCheckout(newCheckout);
-                    }
-                } else {
-                    const newCheckout = await client.checkout.create();
-                    localStorage.setItem('shopify_checkout_id', newCheckout.id);
-                    setCheckout(newCheckout);
-                }
-            } catch (error) {
-                console.error('Error initializing checkout:', error);
-            } finally {
-                setIsInitializing(false);
-            }
-        };
-
-        initializeCheckout();
-    }, []);
 
     const openCart = () => setIsCartOpen(true);
     const closeCart = () => setIsCartOpen(false);
 
-    const addLineItem = async (variantId, quantity) => {
-        if (!checkout) return;
-        openCart();
-        try {
-            const lineItemsToAdd = [{ variantId, quantity }];
-            const updatedCheckout = await client.checkout.addLineItems(checkout.id, lineItemsToAdd);
-            setCheckout(updatedCheckout);
-        } catch (error) {
-            console.error('Error adding line item:', error);
+    const addItem = (product, variant, quantity = 1) => {
+        setItems(prev => {
+            const existing = prev.find(i => i.variant.id === variant.id);
+            if (existing) {
+                return prev.map(i =>
+                    i.variant.id === variant.id
+                        ? { ...i, quantity: i.quantity + quantity }
+                        : i
+                );
+            }
+            return [...prev, { product, variant, quantity }];
+        });
+        setIsCartOpen(true);
+    };
+
+    const removeItem = (variantId) => {
+        setItems(prev => prev.filter(i => i.variant.id !== variantId));
+    };
+
+    const updateQuantity = (variantId, quantity) => {
+        if (quantity <= 0) {
+            removeItem(variantId);
+            return;
         }
+        setItems(prev =>
+            prev.map(i => i.variant.id === variantId ? { ...i, quantity } : i)
+        );
     };
 
-    const removeLineItem = async (lineItemId) => {
-        if (!checkout) return;
-        try {
-            const updatedCheckout = await client.checkout.removeLineItems(checkout.id, [lineItemId]);
-            setCheckout(updatedCheckout);
-        } catch (error) {
-            console.error('Error removing line item:', error);
-        }
-    };
+    const clearCart = () => setItems([]);
 
-    const updateLineItem = async (lineItemId, quantity) => {
-        if (!checkout) return;
-        try {
-            const lineItemsToUpdate = [{ id: lineItemId, quantity }];
-            const updatedCheckout = await client.checkout.updateLineItems(checkout.id, lineItemsToUpdate);
-            setCheckout(updatedCheckout);
-        } catch (error) {
-            console.error('Error updating line item:', error);
-        }
-    };
+    const totalItems = items.reduce((t, i) => t + i.quantity, 0);
+    const subtotal = items.reduce((t, i) => t + i.variant.price * i.quantity, 0);
 
-    const value = {
-        checkout,
-        isCartOpen,
-        isInitializing,
-        openCart,
-        closeCart,
-        addLineItem,
-        removeLineItem,
-        updateLineItem,
-    };
+    return (
+        <CartContext.Provider value={{
+            items,
+            isCartOpen,
+            openCart,
+            closeCart,
+            addItem,
+            removeItem,
+            updateQuantity,
+            clearCart,
+            totalItems,
+            subtotal,
+        }}>
+            {children}
+        </CartContext.Provider>
+    );
+}
 
-    return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
-};
+export const useCart = () => useContext(CartContext);

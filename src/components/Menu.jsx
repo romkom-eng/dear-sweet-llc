@@ -1,104 +1,102 @@
-import React, { useEffect, useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
-import client from '../services/shopify';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { PRODUCTS } from '../data/products';
 import { useCart } from '../context/CartContext';
+import { ShoppingBag, Search } from 'lucide-react';
+
+const serif = "'Cormorant Garamond', Georgia, serif";
+const sans = "'Manrope', system-ui, sans-serif";
 
 export default function Menu() {
-    const [products, setProducts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const { addLineItem } = useCart();
+    const [search, setSearch] = useState('');
+    const { addItem, openCart } = useCart();
 
-    useEffect(() => {
-        client.product.fetchAll().then((fetchedProducts) => {
-            setProducts(fetchedProducts);
-            setIsLoading(false);
-        }).catch(err => {
-            console.error('Error fetching products from Shopify:', err);
-            setIsLoading(false);
-        });
-    }, []);
+    const filtered = PRODUCTS.filter(p =>
+        p.title.toLowerCase().includes(search.toLowerCase()) ||
+        p.tags.some(t => t.toLowerCase().includes(search.toLowerCase()))
+    );
 
-    const handleQuickAdd = (e, variantId) => {
-        e.preventDefault(); // Prevent navigating to detail page on quick add click
-        e.stopPropagation();
-        addLineItem(variantId, 1);
+    const handleAdd = (p) => {
+        addItem(p, p.variants[0], 1);
+        openCart();
     };
 
     return (
-        <div className="flex flex-col flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 py-12 font-display">
-            <div className="mb-10 text-center md:text-left">
-                <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-100 mb-2">The Collection</h1>
-                <p className="text-primary font-medium text-lg">Authentic Dubai Chewy Cookies delivered.</p>
+        <div style={{ fontFamily: sans, background: '#FDF6EC', minHeight: '100vh' }}>
+
+            {/* Page Header */}
+            <div style={{ background: '#2C1810', padding: '72px 24px 40px', textAlign: 'center' }}>
+                <div style={{ fontSize: '0.68rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', marginBottom: 16 }}>Our Selection</div>
+                <h1 style={{ fontFamily: serif, fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: '#C9A96E', margin: '0 0 20px', fontWeight: 600 }}>The Collection</h1>
+                <p style={{ color: 'rgba(253,246,236,0.6)', fontSize: '0.9rem', lineHeight: 1.7, maxWidth: 440, margin: '0 auto' }}>
+                    Every cookie is handcrafted to order with premium Dubai chocolate, pistachio & kunafa pastry.
+                </p>
             </div>
 
-            <div className="flex gap-3 mb-10 overflow-x-auto pb-2 no-scrollbar justify-center md:justify-start">
-                <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary text-white px-6 text-sm font-semibold shadow-lg shadow-primary/20">
-                    <span className="material-symbols-outlined text-sm">filter_list</span>
-                    All Cookies
-                </button>
+            {/* Search */}
+            <div style={{ background: '#2C1810', paddingBottom: 28, display: 'flex', justifyContent: 'center' }}>
+                <div style={{ position: 'relative', width: '100%', maxWidth: 440, padding: '0 24px' }}>
+                    <Search size={16} style={{ position: 'absolute', left: 38, top: '50%', transform: 'translateY(-50%)', color: 'rgba(201,169,110,0.5)' }} />
+                    <input
+                        type="text" placeholder="Search cookies..." value={search} onChange={e => setSearch(e.target.value)}
+                        style={{ width: '100%', background: 'rgba(253,246,236,0.08)', border: '1px solid rgba(201,169,110,0.2)', borderRadius: 4, padding: '12px 16px 12px 40px', color: '#FDF6EC', fontSize: '0.85rem', outline: 'none', fontFamily: sans, boxSizing: 'border-box' }}
+                    />
+                </div>
             </div>
 
-            {isLoading ? (
-                <div className="flex justify-center items-center py-20">
-                    <span className="material-symbols-outlined text-primary text-4xl animate-spin">refresh</span>
-                    <span className="ml-4 font-bold text-slate-500">Baking...</span>
-                </div>
-            ) : products.length === 0 ? (
-                <div className="flex flex-col justify-center items-center py-20 text-center">
-                    <span className="material-symbols-outlined text-slate-300 text-6xl mb-4">cookie</span>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Sold Out Today</h2>
-                    <p className="mt-2 text-slate-500 dark:text-slate-400 max-w-md">Our signature batches have sold out. Please check back later for our next drop.</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {products.map(product => {
-                        const firstVariant = product.variants[0];
-                        const imageUrl = product.images.length > 0 ? product.images[0].src : '';
-                        return (
-                            <Link
-                                key={product.id}
-                                to={`/product/${product.id}`}
-                                className="group flex flex-col gap-3 pb-4 bg-white dark:bg-slate-800/50 rounded-xl overflow-hidden border border-primary/5 hover:border-primary/20 transition-all shadow-sm hover:shadow-xl"
-                            >
-                                <div className="relative overflow-hidden aspect-[4/5] bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
-                                    {imageUrl ? (
-                                        <div
-                                            className="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
-                                            style={{ backgroundImage: `url(${imageUrl})` }}
-                                        />
-                                    ) : (
-                                        <span className="material-symbols-outlined text-6xl text-slate-300">image</span>
-                                    )}
-                                    {/* Decorative Elements */}
-                                    <div className="absolute top-3 left-3 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
-                                        Signature
+            {/* Products */}
+            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 24px 96px' }}>
+                {filtered.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '80px 0' }}>
+                        <p style={{ color: '#a07840' }}>No cookies found for "{search}"</p>
+                    </div>
+                ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 28 }}>
+                        {filtered.map(p => (
+                            <div key={p.id} style={{ background: '#fff', borderRadius: 4, overflow: 'hidden', border: '1px solid #e8d8ca', transition: 'transform 0.25s, box-shadow 0.25s' }}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(44,24,16,0.1)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
+
+                                <Link to={`/product/${p.id}`} style={{ textDecoration: 'none', display: 'block' }}>
+                                    <div style={{ aspectRatio: '1', overflow: 'hidden', background: '#f5ecd8', position: 'relative' }}>
+                                        <img src={p.image} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
+                                            onMouseEnter={e => e.target.style.transform = 'scale(1.06)'}
+                                            onMouseLeave={e => e.target.style.transform = 'none'} />
+                                        {p.tags[0] && (
+                                            <div style={{ position: 'absolute', top: 14, left: 14, background: 'rgba(44,24,16,0.85)', color: '#C9A96E', fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '4px 10px', borderRadius: 2 }}>
+                                                {p.tags[0]}
+                                            </div>
+                                        )}
                                     </div>
-                                    <button
-                                        onClick={(e) => handleQuickAdd(e, firstVariant.id)}
-                                        className="absolute bottom-3 right-3 h-10 w-10 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur-md flex items-center justify-center text-primary shadow-lg hover:bg-primary hover:text-white transition-colors"
-                                    >
-                                        <span className="material-symbols-outlined">add_shopping_cart</span>
-                                    </button>
-                                </div>
+                                </Link>
 
-                                <div className="px-4 py-2 flex flex-col flex-1">
-                                    <div className="flex justify-between items-start mb-1 gap-2">
-                                        <h3 className="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">{product.title}</h3>
+                                <div style={{ padding: '20px 20px 16px' }}>
+                                    {p.subtitle && <div style={{ fontSize: '0.62rem', color: '#C9A96E', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>{p.subtitle}</div>}
+                                    <Link to={`/product/${p.id}`} style={{ textDecoration: 'none' }}>
+                                        <h3 style={{ fontFamily: serif, fontSize: '1.2rem', color: '#2C1810', margin: '0 0 6px', fontWeight: 500 }}>{p.title}</h3>
+                                    </Link>
+                                    <p style={{ fontSize: '0.78rem', color: '#6b4c35', lineHeight: 1.6, margin: '0 0 16px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                        {p.description}
+                                    </p>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontWeight: 700, color: '#a07840', fontSize: '1.1rem' }}>from ${p.price}</span>
+                                        <button onClick={() => handleAdd(p)} style={{
+                                            background: '#2C1810', color: '#C9A96E', border: 'none',
+                                            borderRadius: 2, padding: '9px 18px', fontSize: '0.72rem',
+                                            fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+                                            cursor: 'pointer', fontFamily: sans, display: 'flex', alignItems: 'center', gap: 6,
+                                        }}
+                                            onMouseEnter={e => e.currentTarget.style.background = '#1a0e09'}
+                                            onMouseLeave={e => e.currentTarget.style.background = '#2C1810'}>
+                                            <ShoppingBag size={13} /> Add
+                                        </button>
                                     </div>
-                                    <p className="text-primary font-bold mb-2">${parseFloat(firstVariant.price.amount).toFixed(2)}</p>
-
-                                    {product.description && (
-                                        <p className="text-slate-500 dark:text-slate-400 text-sm line-clamp-2 mt-auto">
-                                            {product.description}
-                                        </p>
-                                    )}
                                 </div>
-                            </Link>
-                        );
-                    })}
-                </div>
-            )}
-
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

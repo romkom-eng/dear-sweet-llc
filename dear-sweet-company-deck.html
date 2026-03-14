@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dear Sweet LLC — Company Introduction</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Manrope:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --brown: #2C1810;
+            --gold: #C9A96E;
+            --cream: #FDF6EC;
+            --light: #f5ecd8;
+            --muted: rgba(201, 169, 110, 0.6);
+            --serif: 'Cormorant Garamond', Georgia, serif;
+            --sans: 'Manrope', system-ui, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1a1a;
+            font-family: var(--sans);
+            padding: 40px 0;
+        }
+
+        /* Each slide = 1280 × 720 (16:9) */
+        .slide {
+            width: 1280px;
+            height: 720px;
+            margin: 0 auto 32px;
+            position: relative;
+            overflow: hidden;
+            background: var(--cream);
+            display: flex;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ─── Slide 1: Cover ─── */
+        .s1 {
+            background: var(--brown);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .s1 .bg-pattern {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(201, 169, 110, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(201, 169, 110, 0.08) 0%, transparent 45%);
+        }
+
+        .s1 .gold-line {
+            width: 80px;
+            height: 1px;
+            background: var(--gold);
+            margin-bottom: 28px;
+        }
+
+        .s1 h1 {
+            font-family: var(--serif);
+            font-size: 88px;
+            color: var(--cream);
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: -0.01em;
+        }
+
+        .s1 .gold-italic {
+            font-family: var(--serif);
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .s1 .subtitle {
+            font-size: 13px;
+            color: var(--muted);
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            margin-top: 24px;
+            font-weight: 500;
+        }
+
+        .s1 .tagline {
+            font-size: 15px;
+            color: rgba(253, 246, 236, 0.55);
+            margin-top: 36px;
+            max-width: 440px;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .s1 .corner-deco {
+            position: absolute;
+            bottom: 40px;
+            right: 48px;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .s1 .year-badge {
+            position: absolute;
+            top: 44px;
+            left: 52px;
+            border: 1px solid rgba(201, 169, 110, 0.25);
+            borderRadius: 2px;
+            padding: 6px 14px;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        /* ─── Slide 2: About ─── */
+        .s2 {
+            background: var(--cream);
+        }
+
+        .s2 .left {
+            width: 440px;
+            flex-shrink: 0;
+            background: var(--brown);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 52px;
+        }
+
+        .s2 .right {
+            flex: 1;
+            padding: 64px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-label {
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .slide-title {
+            font-family: var(--serif);
+            font-weight: 600;
+            line-height: 1.05;
+        }
+
+        .s2 .section-label {
+            color: var(--muted);
+        }
+
+        .s2 .slide-title {
+            font-size: 56px;
+            color: var(--gold);
+        }
+
+        .s2 .tagline {
+            font-size: 13px;
+            color: rgba(253, 246, 236, 0.6);
+            line-height: 1.75;
+            margin-top: 20px;
+        }
+
+        .s2 .right-title {
+            font-family: var(--serif);
+            font-size: 46px;
+            color: var(--brown);
+            font-weight: 600;
+            line-height: 1.05;
+        }
+
+        .s2 .body-text {
+            font-size: 14px;
+            color: #5a3a28;
+            line-height: 1.85;
+            margin-top: 20px;
+        }
+
+        .s2 .stat-row {
+            display: flex;
+            gap: 36px;
+            margin-top: 36px;
+        }
+
+        .stat {}
+
+        .stat .num {
+            font-family: var(--serif);
+            font-size: 40px;
+            color: var(--gold);
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat .lbl {
+            font-size: 11px;
+            color: #a07840;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .s2 .divider {
+            width: 48px;
+            height: 2px;
+            background: var(--gold);
+            margin-bottom: 32px;
+        }
+
+        /* ─── Slide 3: Products ─── */
+        .s3 {
+            background: var(--brown);
+            flex-direction: column;
+        }
+
+        .s3 .header {
+            padding: 52px 72px 40px;
+        }
+
+        .s3 .header .section-label {
+            color: var(--muted);
+        }
+
+        .s3 .header .slide-title {
+            font-size: 54px;
+            color: var(--cream);
+        }
+
+        .s3 .products {
+            display: flex;
+            gap: 0;
+            flex: 1;
+        }
+
+        .product-card {
+            flex: 1;
+            padding: 32px 48px 48px;
+            border-top: 1px solid rgba(201, 169, 110, 0.15);
+            position: relative;
+        }
+
+        .product-card:not(:last-child) {
+            border-right: 1px solid rgba(201, 169, 110, 0.12);
+        }
+
+        .product-card .badge {
+            display: inline-block;
+            background: rgba(201, 169, 110, 0.12);
+            border: 1px solid rgba(201, 169, 110, 0.25);
+            border-radius: 2px;
+            padding: 4px 12px;
+            font-size: 10px;
+            color: var(--gold);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .product-card .pc-name {
+            font-family: var(--serif);
+            font-size: 34px;
+            color: var(--cream);
+            font-weight: 600;
+            line-height: 1.05;
+            margin-bottom: 12px;
+        }
+
+        .product-card .pc-price {
+            font-size: 22px;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .product-card .pc-desc {
+            font-size: 13px;
+            color: rgba(253, 246, 236, 0.55);
+            line-height: 1.75;
+        }
+
+        .product-card .pc-tags {
+            margin-top: 24px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pc-tag {
+            background: rgba(201, 169, 110, 0.08);
+            border: 1px solid rgba(201, 169, 110, 0.2);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 11px;
+            color: rgba(201, 169, 110, 0.7);
+        }
+
+        /* ─── Slide 4: Why Choose Us ─── */
+        .s4 {
+            background: var(--cream);
+            flex-direction: column;
+        }
+
+        .s4 .header {
+            padding: 52px 72px 32px;
+            border-bottom: 1px solid rgba(44, 24, 16, 0.08);
+        }
+
+        .s4 .header .section-label {
+            color: var(--gold);
+        }
+
+        .s4 .header .slide-title {
+            font-size: 52px;
+            color: var(--brown);
+        }
+
+        .s4 .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            flex: 1;
+        }
+
+        .why-card {
+            padding: 36px 36px 40px;
+            border-right: 1px solid rgba(44, 24, 16, 0.07);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .why-card:last-child {
+            border-right: none;
+        }
+
+        .why-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(201, 169, 110, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .why-title {
+            font-family: var(--serif);
+            font-size: 22px;
+            color: var(--brown);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .why-desc {
+            font-size: 13px;
+            color: #6b4c35;
+            line-height: 1.75;
+        }
+
+        /* ─── Slide 5: Wholesale ─── */
+        .s5 {
+            background: linear-gradient(135deg, #1a0e09 0%, var(--brown) 60%, #3d2012 100%);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .s5 .bg-deco {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(201, 169, 110, 0.1) 0%, transparent 55%);
+        }
+
+        .s5-inner {
+            position: relative;
+            display: flex;
+            gap: 80px;
+            align-items: flex-start;
+            padding: 0 80px;
+        }
+
+        .s5-left {
+            flex: 1;
+        }
+
+        .s5-right {
+            width: 400px;
+            flex-shrink: 0;
+        }
+
+        .s5 .section-label {
+            color: var(--muted);
+        }
+
+        .s5 .slide-title {
+            font-size: 54px;
+            color: var(--cream);
+            margin-bottom: 20px;
+        }
+
+        .s5 .body {
+            font-size: 14px;
+            color: rgba(253, 246, 236, 0.6);
+            line-height: 1.8;
+        }
+
+        .tier-card {
+            background: rgba(201, 169, 110, 0.07);
+            border: 1px solid rgba(201, 169, 110, 0.18);
+            border-radius: 4px;
+            padding: 22px 24px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tier-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--cream);
+        }
+
+        .tier-detail {
+            font-size: 12px;
+            color: rgba(201, 169, 110, 0.6);
+            margin-top: 4px;
+        }
+
+        .tier-price {
+            font-family: var(--serif);
+            font-size: 26px;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .s5-contact {
+            margin-top: 32px;
+            padding: 20px 24px;
+            background: rgba(253, 246, 236, 0.05);
+            border: 1px solid rgba(201, 169, 110, 0.2);
+            border-radius: 4px;
+        }
+
+        .s5-contact p {
+            font-size: 12px;
+            color: rgba(201, 169, 110, 0.6);
+            margin-bottom: 4px;
+        }
+
+        .s5-contact a {
+            color: var(--gold);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* ─── Slide 6: Contact / CTA ─── */
+        .s6 {
+            background: var(--cream);
+        }
+
+        .s6 .left {
+            width: 400px;
+            background: var(--gold);
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 52px;
+        }
+
+        .s6 .right {
+            flex: 1;
+            padding: 64px 64px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .s6 .left .l-label {
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            color: rgba(44, 24, 16, 0.6);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .s6 .left .l-title {
+            font-family: var(--serif);
+            font-size: 52px;
+            color: var(--brown);
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .s6 .left .l-sub {
+            font-size: 13px;
+            color: rgba(44, 24, 16, 0.6);
+            margin-top: 16px;
+            line-height: 1.65;
+        }
+
+        .s6 .right .r-label {
+            color: var(--gold);
+        }
+
+        .s6 .right .slide-title {
+            font-size: 44px;
+            color: var(--brown);
+            margin-bottom: 28px;
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .c-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .c-label {
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            color: #a07840;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .c-val {
+            font-size: 15px;
+            color: var(--brown);
+            font-weight: 600;
+        }
+
+        .s6 .cta {
+            margin-top: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--brown);
+            color: var(--gold);
+            padding: 14px 36px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        /* ─── Print styles ─── */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .slide {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 16 / 9;
+                margin: 0;
+                page-break-after: always;
+                box-shadow: none;
+            }
+
+            .slide * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+
+        /* ─── Toolbar ─── */
+        .toolbar {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toolbar button {
+            background: var(--gold);
+            color: var(--brown);
+            border: none;
+            padding: 12px 24px;
+            font-family: var(--sans);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .toolbar button:hover {
+            background: #b8924f;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║  SLIDE 1 — COVER              ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
+    <div class="slide s1">
+        <div class="bg-pattern"></div>
+        <div class="year-badge">Est. 2024 · Orange County, CA</div>
+        <div class="gold-line"></div>
+        <h1>Dear <span class="gold-italic">Sweet</span></h1>
+        <div class="subtitle">두바이쫀득쿠키 · Authentic Dubai Chewy Cookie</div>
+        <div class="tagline">Premium handcrafted cookies featuring authentic kunafa pastry, pistachio & genuine Dubai
+            chocolate — available for retail and wholesale.</div>
+        <div class="corner-deco">Company Introduction 2024</div>
+    </div>
+
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║  SLIDE 2 — WHO WE ARE         ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
+    <div class="slide s2">
+        <div class="left">
+            <div class="section-label" style="color:rgba(201,169,110,0.55)">About Us</div>
+            <div class="slide-title" style="font-size:58px; color:#C9A96E">Who<br>We Are</div>
+            <div class="tagline">A boutique artisan bakery bringing the authentic flavors of Dubai directly to Southern
+                California.</div>
+            <div style="width:48px; height:1px; background:rgba(201,169,110,0.3); margin-top:32px;"></div>
+            <div
+                style="font-size:11px; color:rgba(201,169,110,0.4); letter-spacing:0.15em; text-transform:uppercase; margin-top:16px;">
+            </div>
+        </div>
+        <div class="right">
+            <div class="divider"></div>
+            <div class="right-title">Crafted With<br><em style="color:#a07840">Passion & Purpose</em></div>
+            <p class="body-text">
+                Dear Sweet was born from a love of Middle Eastern confectionery and a desire to bring something truly
+                unique to the Southern California food scene. Every cookie is handcrafted using imported kataifi
+                (kunafa) pastry, premium pistachio cream, and authentic Dubai chocolate.
+                <br><br>
+                Our cookies are baked fresh to order, individually packaged, and ready for retail display or personal
+                gifting. We serve individual customers, cafés, event planners, and corporate clients throughout Orange
+                County and the LA area.
+                <br><br>
+                <strong style="color:#a07840">Every customer who has tried our cookies has come back for more — and each
+                    batch sells out within 2 days.</strong>
+            </p>
+            <div class="stat-row">
+                <div class="stat">
+                    <div class="num">100%</div>
+                    <div class="lbl">Repurchase Rate</div>
+                </div>
+                <div class="stat">
+                    <div class="num">&lt;2 days</div>
+                    <div class="lbl">Sells Out</div>
+                </div>
+                <div class="stat">
+                    <div class="num">OC & LA</div>
+                    <div class="lbl">Service Area</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║  SLIDE 3 — PRODUCTS           ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
+    <div class="slide s3">
+        <div class="header">
+            <div class="section-label">Our Products</div>
+            <div class="slide-title">Signature<br><span style="color:#C9A96E; font-style:italic">Collection</span></div>
+        </div>
+        <div class="products">
+            <div class="product-card">
+                <div class="badge">Best Seller</div>
+                <div class="pc-name">Original Dubai<br>Chewy Cookie</div>
+                <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:6px;">
+                    <div class="pc-price">$5.00 <span
+                            style="font-size:13px; color:rgba(201,169,110,0.5); font-weight:400">wholesale</span></div>
+                    <div style="font-size:13px; color:rgba(201,169,110,0.4)">·</div>
+                    <div style="font-size:17px; color:rgba(201,169,110,0.6); font-weight:600">$7.00 <span
+                            style="font-size:12px; font-weight:400">MSRP</span></div>
+                </div>
+                <div class="pc-desc">Premium kataifi (kunafa) pastry layered with authentic Dubai chocolate and
+                    Callebaut milk chocolate, all wrapped in a golden, chewy shell. Every bite melts into a rich, nutty
+                    sweetness.</div>
+                <div class="pc-tags">
+                    <span class="pc-tag">Milk Chocolate</span>
+                    <span class="pc-tag">Kunafa</span>
+                    <span class="pc-tag">Classic</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="badge">Fan Favorite</div>
+                <div class="pc-name">Strawberry Dubai<br>Chewy Cookie</div>
+                <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:6px;">
+                    <div class="pc-price">$6.00 <span
+                            style="font-size:13px; color:rgba(201,169,110,0.5); font-weight:400">wholesale</span></div>
+                    <div style="font-size:13px; color:rgba(201,169,110,0.4)">·</div>
+                    <div style="font-size:17px; color:rgba(201,169,110,0.6); font-weight:600">$8.00 <span
+                            style="font-size:12px; font-weight:400">MSRP</span></div>
+                </div>
+                <div class="pc-desc">Fresh strawberry cream layered with our signature kunafa pastry and white
+                    chocolate, wrapped in a chewy golden shell. Fruity, rich, and completely irresistible.</div>
+                <div class="pc-tags">
+                    <span class="pc-tag">White Chocolate</span>
+                    <span class="pc-tag">Strawberry</span>
+                    <span class="pc-tag">Seasonal</span>
+                </div>
+            </div>
+            <div class="product-card" style="padding-right:60px">
+                <div class="badge" style="visibility:hidden">.</div>
+                <div class="pc-name" style="font-size:26px; margin-top:8px; color:rgba(253,246,236,0.7)">Box<br>Options
+                </div>
+                <div style="margin-top:24px; display:flex; flex-direction:column; gap:12px;">
+                    <div
+                        style="border:1px solid rgba(201,169,110,0.2); border-radius:3px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div style="font-size:12px; color:rgba(201,169,110,0.6);">1 Cookie</div>
+                            <div style="font-size:10px; color:rgba(201,169,110,0.35); margin-top:2px">Any flavor</div>
+                        </div>
+                        <div style="font-size:13px; color:#C9A96E; font-weight:700">$7–$8</div>
+                    </div>
+                    <div
+                        style="border:1px solid rgba(201,169,110,0.2); border-radius:3px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div style="font-size:12px; color:rgba(201,169,110,0.6);">4-Pack Box</div>
+                            <div style="font-size:10px; color:rgba(201,169,110,0.35); margin-top:2px">2 Original + 2
+                                Strawberry</div>
+                        </div>
+                        <div style="font-size:13px; color:#C9A96E; font-weight:700">$20</div>
+                    </div>
+                    <div
+                        style="border:1px solid rgba(201,169,110,0.2); border-radius:3px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div style="font-size:12px; color:rgba(201,169,110,0.6);">12-Pack Box</div>
+                            <div style="font-size:10px; color:rgba(201,169,110,0.35); margin-top:2px">6 Original + 6
+                                Strawberry</div>
+                        </div>
+                        <div style="font-size:13px; color:#C9A96E; font-weight:700">$60</div>
+                    </div>
+                    <div
+                        style="border:1px solid rgba(201,169,110,0.35); border-radius:3px; padding:12px 16px; background:rgba(201,169,110,0.06); display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div style="font-size:12px; color:rgba(201,169,110,0.6);">Wholesale (30+)</div>
+                            <div style="font-size:10px; color:rgba(201,169,110,0.35); margin-top:2px">Custom mix
+                                available</div>
+                        </div>
+                        <div style="font-size:13px; color:#C9A96E; font-weight:700">Quote</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║  SLIDE 4 — WHY CHOOSE US      ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
+    <div class="slide s4">
+        <div class="header" style="display:flex; align-items:flex-end; justify-content:space-between;">
+            <div>
+                <div class="section-label" style="color:#C9A96E">Why Dear Sweet</div>
+                <div class="slide-title" style="font-size:52px; color:#2C1810">What Sets Us Apart</div>
+            </div>
+            <div
+                style="font-size:12px; color:#a07840; max-width:280px; text-align:right; line-height:1.65; margin-bottom:6px;">
+                Every detail matters — from ingredient sourcing to the final package.</div>
+        </div>
+        <div class="grid">
+            <div class="why-card">
+                <div class="why-icon">🌰</div>
+                <div class="why-title">Authentic Ingredients</div>
+                <p class="why-desc">Imported kataifi pastry, premium pistachio cream, and genuine Dubai chocolate. No
+                    substitutes, no shortcuts.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🍪</div>
+                <div class="why-title">Handcrafted Daily</div>
+                <p class="why-desc">Each cookie is made fresh to order by hand. We never pre-batch or freeze finished
+                    product.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">📦</div>
+                <div class="why-title">Gift-Ready Packaging</div>
+                <p class="why-desc">Individual wrappers and gift boxes with premium matte finish — café-ready for
+                    display or gifting.</p>
+            </div>
+            <div class="why-card" style="border-right:none">
+                <div class="why-icon">🤝</div>
+                <div class="why-title">Wholesale Friendly</div>
+                <p class="why-desc">Consistent quality &amp; supply for weekly café orders. Customized pricing for
+                    volume partners.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║  SLIDE 5 — WHOLESALE          ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
+    <div class="slide s5">
+        <div class="bg-deco"></div>
+        <div class="s5-inner">
+            <div class="s5-left">
+                <div class="section-label">For Businesses</div>
+                <div class="slide-title">Partner<br>With Us</div>
+                <p class="body">We partner with cafés, restaurants, event planners, hotels, and corporate offices
+                    throughout Orange County and the greater LA area to provide a consistent, premium product your
+                    customers will come back for.</p>
+                <div style="margin-top:36px; display:flex; gap:32px;">
+                    <div>
+                        <div
+                            style="font-family:'Cormorant Garamond',serif; font-size:40px; color:#C9A96E; font-weight:700; line-height:1">
+                            30+</div>
+                        <div
+                            style="font-size:11px; color:rgba(201,169,110,0.5); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px">
+                            Min Order</div>
+                    </div>
+                    <div>
+                        <div
+                            style="font-family:'Cormorant Garamond',serif; font-size:40px; color:#C9A96E; font-weight:700; line-height:1">
+                            24h</div>
+                        <div
+                            style="font-size:11px; color:rgba(201,169,110,0.5); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px">
+                            Quote Time</div>
+                    </div>
+                    <div>
+                        <div
+                            style="font-family:'Cormorant Garamond',serif; font-size:40px; color:#C9A96E; font-weight:700; line-height:1">
+                            5 days</div>
+                        <div
+                            style="font-size:11px; color:rgba(201,169,110,0.5); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px">
+                            Lead Time</div>
+                    </div>
+                </div>
+            </div>
+            <div class="s5-right">
+                <div
+                    style="font-size:10px; letter-spacing:0.2em; color:rgba(201,169,110,0.5); text-transform:uppercase; font-weight:700; margin-bottom:20px;">
+                    Volume Tiers</div>
+                <div class="tier-card">
+                    <div>
+                        <div class="tier-name">Starter</div>
+                        <div class="tier-detail">30–50 boxes / week</div>
+                    </div>
+                    <div class="tier-price">Standard</div>
+                </div>
+                <div class="tier-card">
+                    <div>
+                        <div class="tier-name">Growth</div>
+                        <div class="tier-detail">50–100 boxes / week</div>
+                    </div>
+                    <div class="tier-price">5% off</div>
+                </div>
+                <div class="tier-card" style="border-color:rgba(201,169,110,0.4); background:rgba(201,169,110,0.09)">
+                    <div>
+                        <div class="tier-name" style="color:#C9A96E">Premium</div>
+                        <div class="tier-detail">100+ boxes / week</div>
+                    </div>
+                    <div class="tier-price">10%+ off</div>
+                </div>
+                <div class="s5-contact">
+                    <p>Wholesale inquiries</p>
+                    <a href="mailto:denisoppa00@gmail.com">denisoppa00@gmail.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║  SLIDE 6 — CONTACT / CTA      ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
+    <div class="slide s6">
+        <div class="left">
+            <div class="l-label">Let's Work Together</div>
+            <div class="l-title">Ready<br>to<br>Order?</div>
+            <div class="l-sub">From single boxes to weekly wholesale partnerships — we're here to help.</div>
+        </div>
+        <div class="right">
+            <div class="section-label r-label">Contact Us</div>
+            <div class="slide-title">Get in<br>Touch</div>
+
+            <div class="contact-row">
+                <div class="c-icon">📧</div>
+                <div>
+                    <div class="c-label">Email</div>
+                    <div class="c-val">denisoppa00@gmail.com</div>
+                </div>
+            </div>
+            <div class="contact-row">
+                <div class="c-icon">📍</div>
+                <div>
+                    <div class="c-label">Location</div>
+                    <div class="c-val">Orange County & Los Angeles, CA</div>
+                </div>
+            </div>
+            <div class="contact-row">
+                <div class="c-icon">🌐</div>
+                <div>
+                    <div class="c-label">Website</div>
+                    <div class="c-val">dear-sweet-llc.pages.dev</div>
+                </div>
+            </div>
+            <div class="contact-row">
+                <div class="c-icon">📱</div>
+                <div>
+                    <div class="c-label">Social</div>
+                    <div class="c-val">@dearsweet.llc</div>
+                </div>
+            </div>
+
+            <a class="cta" href="mailto:denisoppa00@gmail.com">
+                → Send an Inquiry
+            </a>
+        </div>
+    </div>
+
+    <!-- ─── PDF Export Button ─── -->
+    <div class="toolbar">
+        <button onclick="window.print()">🖨️ Export as PDF</button>
+    </div>
+
+</body>
+
+</html>

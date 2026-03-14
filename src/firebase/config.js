@@ -1,20 +1,24 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getAuth } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
-// TODO: Replace with actual Firebase project configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDummyKey1234567890",
-    authDomain: "moodpop-bakery.firebaseapp.com",
-    projectId: "moodpop-bakery",
-    storageBucket: "moodpop-bakery.appspot.com",
-    messagingSenderId: "1234567890",
-    appId: "1:1234567890:web:abcdef123456"
+    apiKey: "AIzaSyBZZrrQk1j3HWaB4CDnBE_-7MK08Z3moMc",
+    authDomain: "bakery-inventory-9019b.firebaseapp.com",
+    databaseURL: "https://bakery-inventory-9019b-default-rtdb.firebaseio.com",
+    projectId: "bakery-inventory-9019b",
+    storageBucket: "bakery-inventory-9019b.firebasestorage.app",
+    messagingSenderId: "870930956747",
+    appId: "1:870930956747:web:f036fdc816adb3e2d4364e",
+    measurementId: "G-Y9P2VQT5KN"
 };
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const auth = getAuth(app);
-export const isMockMode = true; // Flag for components to use mock data if needed
+export const googleProvider = new GoogleAuthProvider();
+export const isMockMode = false;
+
+export default app;
