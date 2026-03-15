@@ -190,7 +190,7 @@ export default function Layout() {
                             <div style={{ fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C9A96E', fontWeight: 600, marginBottom: 20 }}>Contact</div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: '0.85rem' }}>
                                 <span>Seoul, South Korea</span>
-                                <a href="mailto:hello@dearsweet.co" style={{ color: 'inherit', textDecoration: 'none' }}>hello@dearsweet.co</a>
+                                <a href="mailto:info@dearsweetllc.com" style={{ color: 'inherit', textDecoration: 'none' }}>info@dearsweetllc.com</a>
                             </div>
                         </div>
                         <div>

@@ -287,7 +287,7 @@ export default function Order() {
                         </button>
 
                         <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#a07840', margin: 0 }}>
-                            We respond to all inquiries within 24 hours · <a href="mailto:hello@dearsweet.co" style={{ color: '#C9A96E' }}>hello@dearsweet.co</a>
+                            We respond to all inquiries within 24 hours · <a href="mailto:info@dearsweetllc.com" style={{ color: '#C9A96E' }}>info@dearsweetllc.com</a>
                         </p>
                     </form>
                 </div>
