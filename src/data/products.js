@@ -28,7 +28,7 @@ export const PRODUCTS = [
         description:
             'A sweet twist on the original. Fresh strawberry cream layered with our signature kunafa pastry and white chocolate, wrapped in a chewy golden shell. Fruity, rich, and completely irresistible.',
         tags: ['Fan Favorite', 'Strawberry', 'White Chocolate'],
-        image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=85&auto=format',
+        image: '/cookie_strawberry_final.png',
         stripeLink: null,
         variants: [
             { id: 'strawberry-1', label: '1 Cookie', price: 8.00 },
