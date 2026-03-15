@@ -41,7 +41,7 @@ export default function Home() {
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(26,14,9,0.75) 0%, rgba(44,24,16,0.65) 60%, rgba(26,14,9,0.85) 100%)' }} />
                 <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 24px', maxWidth: 800 }}>
                     <div style={{ display: 'inline-block', border: '1px solid rgba(201,169,110,0.5)', color: '#C9A96E', fontSize: '0.68rem', letterSpacing: '0.3em', textTransform: 'uppercase', padding: '6px 16px', borderRadius: 2, marginBottom: 28 }}>
-                        Premium Artisanal · 두바이 정품
+                        Premium Artisanal
                     </div>
                     <h1 style={{ fontFamily: serif, fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', fontWeight: 600, color: '#FDF6EC', lineHeight: 1.05, marginBottom: 24 }}>
                         The Original<br />
