@@ -41,9 +41,8 @@ export default function Layout() {
                 <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 68 }}>
 
                     {/* Logo */}
-                    <Link to="/" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: 0 }}>
-                        <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '1.3rem', fontWeight: 700, color: '#C9A96E', letterSpacing: '0.04em', lineHeight: 1.1 }}>Dear Sweet</span>
-                        <span style={{ fontSize: '0.6rem', color: 'rgba(201,169,110,0.6)', letterSpacing: '0.25em', textTransform: 'uppercase' }}>두바이쫀득쿠키</span>
+                    <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                        <img src="/logo_gold.png" alt="Dear Sweet LLC" style={{ height: 50, width: 'auto', objectFit: 'contain' }} />
                     </Link>
 
                     {/* Desktop Nav */}
@@ -176,7 +175,9 @@ export default function Layout() {
                 <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 40px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 48, marginBottom: 48 }}>
                         <div>
-                            <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '1.4rem', color: '#C9A96E', fontWeight: 700, marginBottom: 12 }}>Dear Sweet</div>
+                            <Link to="/" style={{ display: 'inline-block', marginBottom: 16 }}>
+                                <img src="/logo_gold.png" alt="Dear Sweet LLC" style={{ height: 56, width: 'auto', objectFit: 'contain' }} />
+                            </Link>
                             <p style={{ fontSize: '0.85rem', lineHeight: 1.7 }}>Handcrafted luxury cookies with premium pistachio, kunafa & authentic Dubai flavors.</p>
                         </div>
                         <div>
