@@ -12,7 +12,7 @@ export const PRODUCTS = [
         description:
             'The cookie that started it all. Premium kataifi (kunafa) pastry layered with authentic Dubai chocolate and Callebaut milk chocolate, all wrapped in a golden, chewy shell. Every bite melts into a rich, nutty sweetness you can\'t find anywhere else.',
         tags: ['Best Seller', 'Original', 'Milk Chocolate'],
-        image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&q=85&auto=format',
+        image: '/cookie_original_final.png',
         stripeLink: null, // e.g. 'https://buy.stripe.com/XXXXX'
         variants: [
             { id: 'original-1', label: '1 Cookie', price: 7.00 },
