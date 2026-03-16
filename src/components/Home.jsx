@@ -37,7 +37,7 @@ export default function Home() {
 
             {/* ─── HERO ─── */}
             <section style={{ position: 'relative', height: '100vh', minHeight: 600, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src={HERO_IMG} alt="Dubai Chewy Cookie" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
+                <img src={HERO_IMG} alt="Original Dubai Chewy Cookie - Premium Handmade Bakery by Dear Sweet LLC" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(26,14,9,0.75) 0%, rgba(44,24,16,0.65) 60%, rgba(26,14,9,0.85) 100%)' }} />
                 <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '0 24px', maxWidth: 800 }}>
                     <div style={{ display: 'inline-block', border: '1px solid rgba(201,169,110,0.5)', color: '#C9A96E', fontSize: '0.68rem', letterSpacing: '0.3em', textTransform: 'uppercase', padding: '6px 16px', borderRadius: 2, marginBottom: 28 }}>
@@ -45,7 +45,7 @@ export default function Home() {
                     </div>
                     <h1 style={{ fontFamily: serif, fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', fontWeight: 600, color: '#FDF6EC', lineHeight: 1.05, marginBottom: 24 }}>
                         The Original<br />
-                        <span style={{ color: '#C9A96E', fontStyle: 'italic' }}>Dubai Experience</span>
+                        <span style={{ color: '#C9A96E', fontStyle: 'italic' }}>Dubai Chewy Cookie</span>
                     </h1>
                     <p style={{ fontSize: '1rem', color: 'rgba(253,246,236,0.75)', lineHeight: 1.7, marginBottom: 40, maxWidth: 500, margin: '0 auto 40px' }}>
                         Handcrafted with premium pistachio, kunafa & authentic Dubai chocolate. Each bite is a journey.
@@ -102,7 +102,7 @@ export default function Home() {
                                 onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
                                 <Link to={`/product/${p.id}`} style={{ textDecoration: 'none', display: 'block' }}>
                                     <div style={{ aspectRatio: '4/3', overflow: 'hidden', background: '#f5ecd8' }}>
-                                        <img src={p.image} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
+                                        <img src={p.image} alt={`${p.title} - Authentic Dubai Chewy Cookie`} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
                                             onMouseEnter={e => e.target.style.transform = 'scale(1.05)'}
                                             onMouseLeave={e => e.target.style.transform = 'none'} />
                                     </div>
@@ -163,7 +163,7 @@ export default function Home() {
                     </Link>
                 </div>
                 <div style={{ overflow: 'hidden', background: '#1a0e09' }}>
-                    <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=900&q=80&auto=format" alt="About" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />
+                    <img src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=900&q=80&auto=format" alt="Handmade Dubai Chewy Cookie Preparation - Dear Sweet LLC" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />
                 </div>
             </section>
 
