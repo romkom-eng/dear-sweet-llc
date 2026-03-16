@@ -12,6 +12,8 @@ const EMAILJS_SERVICE = 'service_glti2i5';
 const EMAILJS_TEMPLATE = 'template_i69i2pi';
 const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'; // 필요 시 교체
 
+const MINIMUM_ORDER_AMOUNT = 20.00; // 최소 주문 금액 설정
+
 export default function CartDrawer() {
     const { items, isCartOpen, closeCart, removeItem, updateQuantity, subtotal, totalItems, clearCart } = useCart();
     const { user } = useAuth();
@@ -201,13 +203,28 @@ export default function CartDrawer() {
                                     <span style={{ fontSize: '0.78rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b4c35' }}>Subtotal</span>
                                     <span style={{ fontFamily: serif, fontSize: '1.5rem', color: '#2C1810', fontWeight: 600 }}>${subtotal.toFixed(2)}</span>
                                 </div>
-                                <button onClick={() => setCheckoutState('form')} style={{
-                                    width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8,
-                                    background: '#C9A96E', color: '#2C1810', border: 'none',
-                                    padding: '15px', borderRadius: 2, fontWeight: 700,
-                                    fontSize: '0.82rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-                                    cursor: 'pointer', fontFamily: sans,
-                                }}>
+
+                                {subtotal < MINIMUM_ORDER_AMOUNT && (
+                                    <div style={{ textAlign: 'center', marginBottom: 16, padding: '10px 14px', background: 'rgba(201,169,110,0.1)', border: '1px dashed rgba(201,169,110,0.4)', borderRadius: 4 }}>
+                                        <p style={{ margin: 0, fontSize: '0.78rem', color: '#a07840', fontWeight: 600, lineHeight: 1.4 }}>
+                                            Minimum order amount is ${MINIMUM_ORDER_AMOUNT.toFixed(2)}.<br />
+                                            Add <span style={{ color: '#2C1810', fontWeight: 800 }}>${(MINIMUM_ORDER_AMOUNT - subtotal).toFixed(2)}</span> more to checkout.
+                                        </p>
+                                    </div>
+                                )}
+
+                                <button
+                                    onClick={() => setCheckoutState('form')}
+                                    disabled={subtotal < MINIMUM_ORDER_AMOUNT}
+                                    style={{
+                                        width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8,
+                                        background: subtotal < MINIMUM_ORDER_AMOUNT ? '#e8d8ca' : '#C9A96E',
+                                        color: subtotal < MINIMUM_ORDER_AMOUNT ? '#a07840' : '#2C1810',
+                                        border: 'none',
+                                        padding: '15px', borderRadius: 2, fontWeight: 700,
+                                        fontSize: '0.82rem', letterSpacing: '0.15em', textTransform: 'uppercase',
+                                        cursor: subtotal < MINIMUM_ORDER_AMOUNT ? 'not-allowed' : 'pointer', fontFamily: sans,
+                                    }}>
                                     Place Order <ArrowRight size={16} />
                                 </button>
                                 <p style={{ fontSize: '0.7rem', color: '#a07840', textAlign: 'center', margin: '10px 0 0' }}>
