@@ -8,7 +8,7 @@ export async function onRequestPost({ request, env }) {
     }
 
     try {
-        const { items, deliveryMethod, shippingFee } = await request.json();
+        const { items, deliveryMethod, shippingFee, metadata } = await request.json();
 
         // Line items for Stripe
         const line_items = items.map((item) => ({
@@ -43,6 +43,13 @@ export async function onRequestPost({ request, env }) {
             'success_url': `${new URL(request.url).origin}/?success=true`,
             'cancel_url': `${new URL(request.url).origin}/?canceled=true`,
         });
+
+        // Add metadata
+        if (metadata) {
+            Object.keys(metadata).forEach(key => {
+                body.append(`metadata[${key}]`, metadata[key]);
+            });
+        }
 
         line_items.forEach((item, index) => {
             body.append(`line_items[${index}][price_data][currency]`, item.price_data.currency);

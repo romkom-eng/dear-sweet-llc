@@ -9,6 +9,7 @@ export default defineConfig({
         react(),
         Sitemap({
             hostname: 'https://dearsweet.pages.dev',
+            generateRobotsTxt: true,
             dynamicRoutes: [
                 '/',
                 '/order',
