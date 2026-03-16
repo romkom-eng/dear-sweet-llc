@@ -19,7 +19,9 @@ export default function CartDrawer() {
     const { user } = useAuth();
     const [checkoutState, setCheckoutState] = useState('idle'); // 'idle' | 'form' | 'sending' | 'sent'
     const [deliveryMethod, setDeliveryMethod] = useState('pickup'); // 'pickup' | 'shipping'
-    const [contact, setContact] = useState({ name: user?.displayName || '', email: user?.email || '', phone: '' });
+    const [contact, setContact] = useState({ name: user?.displayName || '', email: user?.email || '', phone: '', notes: '' });
+
+    const today = new Date().toISOString().split('T')[0];
 
     const isMinimumMet = deliveryMethod === 'pickup' || subtotal >= MINIMUM_SHIPPING_AMOUNT;
     const shippingFee = deliveryMethod === 'shipping' ? 29.00 : 0;
@@ -42,7 +44,7 @@ export default function CartDrawer() {
                 pickup_date: contact.date || 'TBD',
                 pickup_time: contact.time || 'TBD',
                 pickup_location: deliveryMethod === 'pickup' ? 'Irvine, CA' : 'Next Day Air Shipping',
-                details: `ORDER SUMMARY:\n${orderSummary}\n\nMETHOD: ${deliveryMethod.toUpperCase()}\nSUBTOTAL: $${subtotal.toFixed(2)}\nSHIPPING: $${shippingFee.toFixed(2)}\nTOTAL: $${total.toFixed(2)}\n\nCUSTOMER NOTES: ${contact.notes || 'None'}`,
+                details: `ORDER SUMMARY:\n${orderSummary}\n\nMETHOD: ${deliveryMethod.toUpperCase()}\nSUBTOTAL: $${subtotal.toFixed(2)}\nSHIPPING: $${shippingFee.toFixed(2)}\nTOTAL: $${total.toFixed(2)}\n\nPAYMENT STATUS: PENDING (Customer redirected to Stripe)\n\nCUSTOMER NOTES: ${contact.notes || 'None'}`,
             }, EMAILJS_PUBLIC_KEY);
             setCheckoutState('sent');
             clearCart();
@@ -92,30 +94,34 @@ export default function CartDrawer() {
                 {/* ── SENT STATE ── */}
                 {checkoutState === 'sent' && (
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 32, textAlign: 'center', gap: 16 }}>
-                        <CheckCircle2 size={56} color="#2a7a4b" />
-                        <h3 style={{ fontFamily: serif, fontSize: '1.8rem', color: '#2C1810', margin: 0 }}>Order Received!</h3>
+                        <div style={{ position: 'relative' }}>
+                            <CheckCircle2 size={56} color="#2a7a4b" />
+                            <div style={{ position: 'absolute', top: -4, right: -4, background: '#C9A96E', color: '#2C1810', fontSize: '0.6rem', fontWeight: 800, padding: '2px 6px', borderRadius: 4, letterSpacing: '0.05em' }}>STEP 1/2</div>
+                        </div>
+                        <h3 style={{ fontFamily: serif, fontSize: '1.8rem', color: '#2C1810', margin: 0 }}>Details Received!</h3>
                         <p style={{ color: '#6b4c35', fontSize: '0.88rem', lineHeight: 1.7, maxWidth: 280 }}>
-                            We've received your order and will contact you within 24 hours to confirm payment and details.
+                            To confirm your {deliveryMethod} order, please complete the final payment via Stripe below.
                         </p>
 
-                        <div style={{ width: '100%', padding: '20px', background: '#fff', border: '1px solid #e8d8ca', borderRadius: 8, marginTop: 8 }}>
-                            <p style={{ fontSize: '0.75rem', color: '#a07840', fontWeight: 600, marginBottom: 12, textAlign: 'center' }}>Want to pay now via Stripe?</p>
+                        <div style={{ width: '100%', padding: '24px 20px', background: '#fff', border: '2px solid #C9A96E', borderRadius: 8, marginTop: 8, boxShadow: '0 8px 24px rgba(201,169,110,0.15)' }}>
+                            <p style={{ fontSize: '0.8rem', color: '#2C1810', fontWeight: 700, marginBottom: 16, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Final Step: Secure Payment</p>
                             <a href="https://buy.stripe.com/dRmbIU36T37L76oa6idwc00" target="_blank" rel="noopener noreferrer" style={{
                                 width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8,
                                 background: '#635BFF', color: '#fff', border: 'none',
-                                borderRadius: 4, padding: '12px', fontWeight: 700, fontSize: '0.8rem',
+                                borderRadius: 4, padding: '16px', fontWeight: 800, fontSize: '0.9rem',
                                 letterSpacing: '0.05em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: sans, textDecoration: 'none'
                             }}>
-                                Pay via Stripe
+                                Pay ${total.toFixed(2)} Now
                             </a>
+                            <p style={{ fontSize: '0.68rem', color: '#a07840', marginTop: 12 }}>Payment is required to confirm your order.</p>
                         </div>
 
                         <button onClick={() => { closeCart(); setCheckoutState('idle'); }} style={{
-                            marginTop: 16, background: '#2C1810', color: '#C9A96E', border: 'none',
-                            borderRadius: 4, padding: '12px 32px', fontWeight: 700, fontSize: '0.82rem',
-                            letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: sans,
+                            marginTop: 16, background: 'none', border: '1px solid #e8d8ca',
+                            color: '#6b4c35', borderRadius: 4, padding: '10px 24px', fontWeight: 600, fontSize: '0.75rem',
+                            letterSpacing: '0.05em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: sans,
                         }}>
-                            Continue Shopping
+                            Return Home
                         </button>
                     </div>
                 )}
@@ -148,7 +154,7 @@ export default function CartDrawer() {
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                                 <div>
                                     <label style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#a07840', display: 'block', marginBottom: 6 }}>Pickup Date *</label>
-                                    <input type="date" required value={contact.date || ''} onChange={e => setContact({ ...contact, date: e.target.value })}
+                                    <input type="date" required min={today} value={contact.date || ''} onChange={e => setContact({ ...contact, date: e.target.value })}
                                         style={{ width: '100%', boxSizing: 'border-box', background: '#fff', border: '1px solid #e8d8ca', borderRadius: 4, padding: '11px 14px', fontFamily: sans, fontSize: '0.88rem', color: '#2C1810', outline: 'none' }} />
                                 </div>
                                 <div>
@@ -192,11 +198,11 @@ export default function CartDrawer() {
 
                         <button type="submit" disabled={checkoutState === 'sending'} style={{
                             background: '#C9A96E', color: '#2C1810', border: 'none', borderRadius: 4,
-                            padding: '14px', fontSize: '0.82rem', fontWeight: 700, letterSpacing: '0.12em',
+                            padding: '14px', fontSize: '0.82rem', fontWeight: 800, letterSpacing: '0.12em',
                             textTransform: 'uppercase', cursor: 'pointer', fontFamily: sans,
                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                         }}>
-                            {checkoutState === 'sending' ? <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Sending…</> : 'Place Order Request'}
+                            {checkoutState === 'sending' ? <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Processing…</> : 'Confirm & Proceed to Payment'}
                         </button>
                         <button type="button" onClick={() => setCheckoutState('idle')} style={{ background: 'none', border: 'none', color: '#a07840', cursor: 'pointer', fontSize: '0.8rem', fontFamily: sans }}>
                             ← Back to cart
