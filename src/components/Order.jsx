@@ -49,6 +49,10 @@ const testimonials = [
 
 const productOptions = PRODUCTS.map(p => p.title);
 
+const EMAILJS_SERVICE = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_glti2i5';
+const EMAILJS_TEMPLATE = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_i69i2pi';
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
+
 export default function Order() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSending, setIsSending] = useState(false);
@@ -73,8 +77,8 @@ export default function Order() {
         setIsSending(true);
         try {
             await emailjs.send(
-                'service_glti2i5',
-                'template_i69i2pi',
+                EMAILJS_SERVICE,
+                EMAILJS_TEMPLATE,
                 {
                     to_name: formData.name,
                     to_email: formData.email,
@@ -86,9 +90,12 @@ export default function Order() {
                     time: 'B2B Wholesale Inquiry',
                     details: `Business: ${formData.businessName} (${formData.businessType})\nWebsite: ${formData.website}\nNotes: ${formData.details}`,
                 },
-                'YOUR_PUBLIC_KEY'
+                EMAILJS_PUBLIC_KEY
             );
-        } catch { /* silent fail — still show success */ }
+        } catch (error) {
+            console.error('EmailJS Error:', error);
+            /* silent fail — still show success or show error based on UX preference */
+        }
         setIsSending(false);
         setIsSubmitted(true);
     };
