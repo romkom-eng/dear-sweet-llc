@@ -13,7 +13,7 @@ export const PRODUCTS = [
             'The cookie that started it all. Premium kataifi (kunafa) pastry layered with authentic Dubai chocolate and Callebaut milk chocolate, all wrapped in a golden, chewy shell. Every bite melts into a rich, nutty sweetness you can\'t find anywhere else.',
         tags: ['Best Seller', 'Original', 'Milk Chocolate'],
         image: '/cookie_original_final.png',
-        stripeLink: null, // e.g. 'https://buy.stripe.com/XXXXX'
+        stripeLink: 'https://buy.stripe.com/dRmbIU36T37L76oa6idwc00', // e.g. 'https://buy.stripe.com/XXXXX'
         variants: [
             { id: 'original-1', label: '1 Cookie', price: 7.00 },
             { id: 'original-6', label: '6-Pack Box', price: 39.99 },
@@ -29,7 +29,7 @@ export const PRODUCTS = [
             'A sweet twist on the original. Fresh strawberry cream layered with our signature kunafa pastry and white chocolate, wrapped in a chewy golden shell. Fruity, rich, and completely irresistible.',
         tags: ['Fan Favorite', 'Strawberry', 'White Chocolate'],
         image: '/cookie_strawberry_final.png',
-        stripeLink: null,
+        stripeLink: 'https://buy.stripe.com/dRmbIU36T37L76oa6idwc00',
         variants: [
             { id: 'strawberry-1', label: '1 Cookie', price: 8.00 },
             { id: 'strawberry-6', label: '6-Pack Box', price: 44.99 },
