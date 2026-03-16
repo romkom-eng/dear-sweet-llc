@@ -37,18 +37,17 @@ export default function CartDrawer() {
                 to_name: contact.name,
                 to_email: contact.email,
                 phone: contact.phone,
-                product: `Cart Order (${deliveryMethod === 'shipping' ? 'Next Day Air Shipping' : 'Local Pickup'})`,
+                product: items.map(i => `${i.product.title.replace(' Dubai Chewy Cookie', '')} (${i.variant.label}) x${i.quantity}`).join(', '),
                 quantity: `${totalItems} item(s)`,
-                location: deliveryMethod === 'shipping' ? 'Shipping Requested' : 'Pickup Requested',
-                date: new Date().toLocaleDateString(),
-                time: new Date().toLocaleTimeString(),
-                details: `ORDER SUMMARY:\n${orderSummary}\n\nDELIVERY: ${deliveryMethod.toUpperCase()}\nSUBTOTAL: $${subtotal.toFixed(2)}\nSHIPPING: $${shippingFee.toFixed(2)}\nTOTAL: $${total.toFixed(2)}`,
+                pickup_date: contact.date || 'TBD',
+                pickup_time: contact.time || 'TBD',
+                pickup_location: deliveryMethod === 'pickup' ? 'Irvine, CA' : 'Next Day Air Shipping',
+                details: `ORDER SUMMARY:\n${orderSummary}\n\nMETHOD: ${deliveryMethod.toUpperCase()}\nSUBTOTAL: $${subtotal.toFixed(2)}\nSHIPPING: $${shippingFee.toFixed(2)}\nTOTAL: $${total.toFixed(2)}\n\nCUSTOMER NOTES: ${contact.notes || 'None'}`,
             }, EMAILJS_PUBLIC_KEY);
             setCheckoutState('sent');
             clearCart();
         } catch (error) {
             console.error('EmailJS Error:', error);
-            // Even if EmailJS fails, show confirmation (owner gets notified another way)
             setCheckoutState('sent');
             clearCart();
         }
@@ -98,8 +97,21 @@ export default function CartDrawer() {
                         <p style={{ color: '#6b4c35', fontSize: '0.88rem', lineHeight: 1.7, maxWidth: 280 }}>
                             We've received your order and will contact you within 24 hours to confirm payment and details.
                         </p>
+
+                        <div style={{ width: '100%', padding: '20px', background: '#fff', border: '1px solid #e8d8ca', borderRadius: 8, marginTop: 8 }}>
+                            <p style={{ fontSize: '0.75rem', color: '#a07840', fontWeight: 600, marginBottom: 12, textAlign: 'center' }}>Want to pay now via Stripe?</p>
+                            <a href="https://buy.stripe.com/dRmbIU36T37L76oa6idwc00" target="_blank" rel="noopener noreferrer" style={{
+                                width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8,
+                                background: '#635BFF', color: '#fff', border: 'none',
+                                borderRadius: 4, padding: '12px', fontWeight: 700, fontSize: '0.8rem',
+                                letterSpacing: '0.05em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: sans, textDecoration: 'none'
+                            }}>
+                                Pay via Stripe
+                            </a>
+                        </div>
+
                         <button onClick={() => { closeCart(); setCheckoutState('idle'); }} style={{
-                            marginTop: 8, background: '#C9A96E', color: '#2C1810', border: 'none',
+                            marginTop: 16, background: '#2C1810', color: '#C9A96E', border: 'none',
                             borderRadius: 4, padding: '12px 32px', fontWeight: 700, fontSize: '0.82rem',
                             letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: sans,
                         }}>
@@ -131,6 +143,27 @@ export default function CartDrawer() {
                                     style={{ width: '100%', boxSizing: 'border-box', background: '#fff', border: '1px solid #e8d8ca', borderRadius: 4, padding: '11px 14px', fontFamily: sans, fontSize: '0.88rem', color: '#2C1810', outline: 'none' }} />
                             </div>
                         ))}
+
+                        {deliveryMethod === 'pickup' && (
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                                <div>
+                                    <label style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#a07840', display: 'block', marginBottom: 6 }}>Pickup Date *</label>
+                                    <input type="date" required value={contact.date || ''} onChange={e => setContact({ ...contact, date: e.target.value })}
+                                        style={{ width: '100%', boxSizing: 'border-box', background: '#fff', border: '1px solid #e8d8ca', borderRadius: 4, padding: '11px 14px', fontFamily: sans, fontSize: '0.88rem', color: '#2C1810', outline: 'none' }} />
+                                </div>
+                                <div>
+                                    <label style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#a07840', display: 'block', marginBottom: 6 }}>Pickup Time *</label>
+                                    <input type="time" required value={contact.time || ''} onChange={e => setContact({ ...contact, time: e.target.value })}
+                                        style={{ width: '100%', boxSizing: 'border-box', background: '#fff', border: '1px solid #e8d8ca', borderRadius: 4, padding: '11px 14px', fontFamily: sans, fontSize: '0.88rem', color: '#2C1810', outline: 'none' }} />
+                                </div>
+                            </div>
+                        )}
+
+                        <div>
+                            <label style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#a07840', display: 'block', marginBottom: 6 }}>Additional Notes</label>
+                            <textarea placeholder="Any special requests?" value={contact.notes || ''} onChange={e => setContact({ ...contact, notes: e.target.value })}
+                                style={{ width: '100%', boxSizing: 'border-box', background: '#fff', border: '1px solid #e8d8ca', borderRadius: 4, padding: '11px 14px', fontFamily: sans, fontSize: '0.88rem', color: '#2C1810', outline: 'none', resize: 'vertical', minHeight: 60 }} />
+                        </div>
 
                         {/* Order summary */}
                         <div style={{ background: '#fff', border: '1px solid #e8d8ca', borderRadius: 4, padding: 16 }}>
@@ -185,28 +218,31 @@ export default function CartDrawer() {
                                 </div>
                             ) : (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                                    {/* Delivery Toggle */}
-                                    <div style={{ display: 'flex', background: 'rgba(201,169,110,0.1)', borderRadius: 8, padding: 4, border: '1px solid rgba(201,169,110,0.2)' }}>
-                                        <button onClick={() => setDeliveryMethod('pickup')} style={{
-                                            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                                            padding: '10px', borderRadius: 6, border: 'none', cursor: 'pointer', fontFamily: sans, fontSize: '0.78rem', fontWeight: 600,
-                                            background: deliveryMethod === 'pickup' ? '#fff' : 'transparent',
-                                            color: deliveryMethod === 'pickup' ? '#2C1810' : '#a07840',
-                                            boxShadow: deliveryMethod === 'pickup' ? '0 2px 8px rgba(44,24,16,0.08)' : 'none',
-                                            transition: 'all 0.2s',
-                                        }}>
-                                            <MapPin size={14} /> Pickup
-                                        </button>
-                                        <button onClick={() => setDeliveryMethod('shipping')} style={{
-                                            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                                            padding: '10px', borderRadius: 6, border: 'none', cursor: 'pointer', fontFamily: sans, fontSize: '0.78rem', fontWeight: 600,
-                                            background: deliveryMethod === 'shipping' ? '#fff' : 'transparent',
-                                            color: deliveryMethod === 'shipping' ? '#2C1810' : '#a07840',
-                                            boxShadow: deliveryMethod === 'shipping' ? '0 2px 8px rgba(44,24,16,0.08)' : 'none',
-                                            transition: 'all 0.2s',
-                                        }}>
-                                            <Truck size={14} /> Shipping
-                                        </button>
+                                    {/* Delivery Toggle - Mandatory Section */}
+                                    <div style={{ marginBottom: 8 }}>
+                                        <label style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#a07840', display: 'block', marginBottom: 10 }}>Select Delivery Method *</label>
+                                        <div style={{ display: 'flex', background: 'rgba(201,169,110,0.1)', borderRadius: 8, padding: 4, border: '1px solid rgba(201,169,110,0.2)' }}>
+                                            <button onClick={() => setDeliveryMethod('pickup')} style={{
+                                                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                                                padding: '12px', borderRadius: 6, border: 'none', cursor: 'pointer', fontFamily: sans, fontSize: '0.85rem', fontWeight: 700,
+                                                background: deliveryMethod === 'pickup' ? '#2C1810' : 'transparent',
+                                                color: deliveryMethod === 'pickup' ? '#C9A96E' : '#a07840',
+                                                boxShadow: deliveryMethod === 'pickup' ? '0 4px 12px rgba(44,24,16,0.15)' : 'none',
+                                                transition: 'all 0.2s',
+                                            }}>
+                                                <MapPin size={16} /> Local Pickup
+                                            </button>
+                                            <button onClick={() => setDeliveryMethod('shipping')} style={{
+                                                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                                                padding: '12px', borderRadius: 6, border: 'none', cursor: 'pointer', fontFamily: sans, fontSize: '0.85rem', fontWeight: 700,
+                                                background: deliveryMethod === 'shipping' ? '#2C1810' : 'transparent',
+                                                color: deliveryMethod === 'shipping' ? '#C9A96E' : '#a07840',
+                                                boxShadow: deliveryMethod === 'shipping' ? '0 4px 12px rgba(44,24,16,0.15)' : 'none',
+                                                transition: 'all 0.2s',
+                                            }}>
+                                                <Truck size={16} /> Shipping
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
