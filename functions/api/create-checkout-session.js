@@ -42,7 +42,13 @@ export async function onRequestPost({ request, env }) {
             'mode': 'payment',
             'success_url': `${new URL(request.url).origin}/?success=true`,
             'cancel_url': `${new URL(request.url).origin}/?canceled=true`,
+            'billing_address_collection': 'auto', // 'required' 도 가능
         });
+
+        // 배송(Shipping) 선택 시 주소 입력 칸 활성화
+        if (deliveryMethod === 'shipping') {
+            body.append('shipping_address_collection[allowed_countries][0]', 'US');
+        }
 
         // Add metadata
         if (metadata) {
