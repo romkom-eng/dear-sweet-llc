@@ -55,6 +55,10 @@ export async function onRequestPost({ request, env }) {
             Object.keys(metadata).forEach(key => {
                 body.append(`metadata[${key}]`, metadata[key]);
             });
+
+            // 이메일 알림에 픽업 정보가 잘 보이도록 결제 설명문(Description)에 추가
+            const description = `Pickup: ${metadata.pickup_date} at ${metadata.pickup_time}. Notes: ${metadata.customer_notes}`;
+            body.append('payment_intent_data[description]', description);
         }
 
         line_items.forEach((item, index) => {
