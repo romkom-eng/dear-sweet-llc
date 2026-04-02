@@ -97,6 +97,26 @@ export default function ProductReviews({ productId }) {
     const displayRating = ((baseTotalScore + realTotalScore) / (baseReviewCount + realReviewCount)).toFixed(1);
     const displayCount = (baseReviewCount + realReviewCount).toLocaleString();
 
+    // Product-specific mock reviews
+    const mockReviews = {
+        'original-dubai-chewy': {
+            name: 'Sarah J.',
+            comment: 'The best Dubai chocolate cookie I have ever had! So stretchy and delicious.',
+        },
+        'strawberry-dubai-chewy': {
+            name: 'Emily K.',
+            comment: 'The strawberry flavor was incredible — the kataifi crunch with the white chocolate is just perfect!',
+        },
+        'mm-chocolate-bagel': {
+            name: 'Chris M.',
+            comment: 'The M&Ms melted so perfectly inside the bagel. It was gooey, chocolatey, and absolutely addicting!',
+        },
+    };
+    const mockReview = mockReviews[productId] || {
+        name: 'A. Customer',
+        comment: 'Absolutely loved this! Amazing quality and flavor.',
+    };
+
     return (
         <div id="reviews" className="mt-20 border-t border-secondary/10 pt-16">
             <h2 className="text-3xl font-display font-bold text-primary dark:text-white mb-10 flex items-center gap-3">
@@ -201,11 +221,11 @@ export default function ProductReviews({ productId }) {
                 {/* Always show the mock review to fulfill schema promise and baseline */}
                 <div className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-secondary/10 flex gap-6">
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary font-bold text-lg">
-                        S
+                        {mockReview.name.charAt(0)}
                     </div>
                     <div>
                         <div className="flex items-center gap-3 mb-1">
-                            <span className="font-bold text-primary dark:text-white">Sarah J.</span>
+                            <span className="font-bold text-primary dark:text-white">{mockReview.name}</span>
                             <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
                                 <CheckCircle size={10} /> Verified Buyer
                             </span>
@@ -218,7 +238,7 @@ export default function ProductReviews({ productId }) {
                             <Star size={12} fill="currentColor" />
                         </div>
                         <p className="text-sm text-text-light/80 dark:text-text-dark/80">
-                            The best Dubai chocolate cookie I have ever had! So stretchy and delicious.
+                            {mockReview.comment}
                         </p>
                     </div>
                 </div>
