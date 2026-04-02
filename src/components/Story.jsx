@@ -28,11 +28,11 @@ export default function Story() {
                                 <div
                                     className="bg-slate-200 dark:bg-slate-800 rounded-2xl overflow-hidden aspect-[4/5] shadow-2xl relative z-10"
                                     role="img"
-                                    aria-label="Rustic close-up of freshly baked cookie"
+                                    aria-label="Strawberry Dubai Chewy Cookie promotional photo"
                                     style={{
-                                        backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBYiYXof7T24buQioDVBavrpIcG_8QlTx0c5T98yyU9IDrT7vu8y-1LczuHx3B4fHxBc0or9jDcTLOyN9HKrMlchFdHIzGFWxyLh3k773E9-yfBEMLjxKHx-WDkjhNvtCZsZFcDBiEltQzby_6ATEMNUwPc8ke6zfMV-t-sunl1pGtAUNOI9xEBpO7aDV5oW79xAFbnnNbThturgAlcAeHt_-RgXo_cVqrIz1-ErrWDSmNXModrt7rSTi17dKdzF2gGqmwQImr1P1M")',
+                                        backgroundImage: 'url("/images/stretchy-story.png")',
                                         backgroundSize: 'cover',
-                                        backgroundPosition: 'center'
+                                        backgroundPosition: 'center top'
                                     }}
                                 />
                                 <div className="absolute -bottom-6 -right-6 w-32 h-32 border-4 border-primary/20 rounded-2xl"></div>
@@ -95,13 +95,20 @@ export default function Story() {
                     </div>
 
                     <div className="lg:w-1/2">
-                        <span className="text-primary font-bold uppercase text-xs mb-4 block">Our Origin</span>
                         <h2 className="text-3xl lg:text-5xl font-bold mb-6 text-slate-900 dark:text-slate-100">From a Craving to Local Phenomenon.</h2>
+
+                        {/* Playful Persona Callout */}
+                        <div className="bg-primary/5 dark:bg-primary/10 border-2 border-dashed border-primary/20 rounded-3xl p-6 mb-8 relative">
+                            <div className="absolute -top-3 -right-3 bg-accent text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Confidential</div>
+                            <p className="text-sm font-bold text-primary mb-2 uppercase tracking-tight">Identity: The Cookie Thief</p>
+                            <p className="text-slate-600 dark:text-slate-400 italic text-sm italic">"They say I'm a thief... but I only stole the recipe for the perfect stretch. It's all mine! ...Until you share."</p>
+                        </div>
+
                         <div className="space-y-6 text-slate-600 dark:text-slate-400 text-lg leading-relaxed italic border-l-4 border-primary/20 pl-8 py-2">
-                            <p>"I couldn't fly to Dubai, and I couldn't accept mediocre imitations. So I locked myself in the kitchen for three weeks straight until the pistachio ratio and the kadayif crunch were absolutely perfect."</p>
+                            <p>"I couldn't fly to Dubai, and I couldn't accept mediocre imitations. So I locked myself in the kitchen until the **velvety cocoa dusting** and the **signature marshmallow stretch** were absolutely perfect."</p>
                         </div>
                         <p className="mt-8 text-slate-600 dark:text-slate-400 leading-relaxed">
-                            We started out of a small kitchen in South Korea, sharing our creations with friends. The overwhelming response told us we had captured something special. A profound, satisfying crunch wrapped inside the nostalgia of a warm, chewy cookie.
+                            We started out of a small kitchen, sharing our creations with friends. The overwhelming response told us we had captured something special. A profound, satisfying **marshmallow pull** revealing the crunch of a pistachio heart.
                         </p>
                     </div>
                 </div>
@@ -153,7 +160,7 @@ export default function Story() {
                 <div className="max-w-3xl mx-auto bg-slate-900 dark:bg-primary/10 rounded-[2rem] p-12 lg:p-20 text-white dark:text-slate-100 overflow-hidden relative">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -mr-32 -mt-32"></div>
                     <h2 className="text-3xl lg:text-5xl font-bold mb-6 relative z-10">Taste the Crunch Today</h2>
-                    <p className="text-slate-300 dark:text-slate-400 mb-10 text-lg relative z-10">Have our legendary Dubai Chewy Cookies delivered fresh to your door in South Korea.</p>
+                    <p className="text-slate-300 dark:text-slate-400 mb-10 text-lg relative z-10">Have our legendary **Marshmallow Stretch** Dubai Balls delivered fresh to your door.</p>
                     <div className="flex flex-wrap justify-center gap-4 relative z-10">
                         <NavLink to="/menu" className="bg-primary text-white px-10 py-4 rounded-xl font-bold hover:opacity-90 transition-opacity">
                             Order Now

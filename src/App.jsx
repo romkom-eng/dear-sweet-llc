@@ -11,6 +11,8 @@ import Order from './components/Order';
 import AdminLogin from './components/AdminLogin';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Terms from './components/Terms';
+import RefundPolicy from './components/RefundPolicy';
+import ShippingPolicy from './components/ShippingPolicy';
 import Home from './components/Home';
 import MenuPage from './components/Menu';
 import Story from './components/Story';
@@ -198,6 +200,8 @@ function App() {
                             <Route path="/order" element={<Order />} />
                             <Route path="/privacy" element={<PrivacyPolicy />} />
                             <Route path="/terms" element={<Terms />} />
+                            <Route path="/refund" element={<RefundPolicy />} />
+                            <Route path="/shipping" element={<ShippingPolicy />} />
                         </Route>
                         <Route path="/admin" element={<AdminRoute />} />
                         <Route path="/admin/products" element={<AdminProductsPage />} />

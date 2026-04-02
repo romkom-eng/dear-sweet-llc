@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProductById } from '../data/products';
 import { useCart } from '../context/CartContext';
-import { ShoppingBag, ArrowLeft, ExternalLink } from 'lucide-react';
-
-const serif = "'Cormorant Garamond', Georgia, serif";
-const sans = "'Manrope', system-ui, sans-serif";
+import { ShoppingBag, ArrowLeft, Star, Heart, Share2, ShieldCheck, Truck, RotateCcw } from 'lucide-react';
+import ProductReviews from './ProductReviews';
 
 export default function ProductDetail() {
     const { id } = useParams();
@@ -16,139 +14,236 @@ export default function ProductDetail() {
     const { addItem, openCart } = useCart();
 
     if (!product) return (
-        <div style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: sans, gap: 16 }}>
-            <div style={{ fontSize: '3rem' }}>🍪</div>
-            <p style={{ color: '#a07840' }}>Product not found.</p>
-            <Link to="/menu" style={{ color: '#2C1810', fontWeight: 600 }}>← Back to Shop</Link>
+        <div className="min-h-[70vh] flex flex-col items-center justify-center p-4 text-center">
+            <div className="text-6xl mb-6">🍪</div>
+            <h2 className="text-2xl font-display font-bold text-primary mb-2">Flavor Not Found</h2>
+            <p className="text-text-light/60 mb-8">This sweet treat seems to have vanished from our bakery.</p>
+            <Link to="/menu" className="bg-primary text-white px-8 py-3 rounded-xl font-bold">
+                Back to Menu
+            </Link>
         </div>
     );
 
     const handleAdd = () => {
         addItem(product, selectedVariant, qty);
         setAdded(true);
-        setTimeout(() => setAdded(false), 1500);
+        setTimeout(() => setAdded(false), 2000);
         openCart();
     };
 
-    // If there's a Stripe link, open it directly
-    const handleBuyNow = () => {
-        if (selectedVariant?.stripeLink || product.stripeLink) {
-            window.open(selectedVariant?.stripeLink || product.stripeLink, '_blank');
-        } else {
-            handleAdd();
-        }
-    };
-
     return (
-        <div style={{ fontFamily: sans, background: '#FDF6EC', minHeight: '100vh' }}>
-
-            {/* Breadcrumb */}
-            <div style={{ background: '#2C1810', padding: '14px 24px' }}>
-                <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Link to="/menu" style={{ color: 'rgba(201,169,110,0.6)', textDecoration: 'none', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <ArrowLeft size={14} /> Shop
-                    </Link>
-                    <span style={{ color: 'rgba(201,169,110,0.3)' }}>/</span>
-                    <span style={{ color: '#C9A96E', fontSize: '0.78rem' }}>{product.title}</span>
+        <div className="max-w-6xl mx-auto pb-32 font-body scroll-smooth">
+            {/* ── Top Navigation ── */}
+            <div className="px-6 py-8 flex items-center justify-between">
+                <Link to="/menu" className="p-4 bg-white dark:bg-surface-dark rounded-2xl shadow-soft border border-secondary/5 text-primary hover:scale-110 transition-transform flex items-center gap-2 font-bold text-sm">
+                    <ArrowLeft size={20} /> <span className="hidden sm:inline">Back to Menu</span>
+                </Link>
+                <div className="flex gap-3">
+                    <button className="p-4 bg-white dark:bg-surface-dark rounded-2xl shadow-soft border border-secondary/5 text-secondary hover:text-primary transition-colors">
+                        <Share2 size={20} />
+                    </button>
+                    <button className="p-4 bg-white dark:bg-surface-dark rounded-2xl shadow-soft border border-secondary/5 text-secondary hover:text-primary transition-colors">
+                        <Heart size={20} />
+                    </button>
                 </div>
             </div>
 
-            {/* Product */}
-            <div style={{ maxWidth: 1100, margin: '0 auto', padding: '56px 24px 96px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'start' }} className="product-detail-grid">
-
-                    {/* Image */}
-                    <div style={{ borderRadius: 4, overflow: 'hidden', background: '#f5ecd8', aspectRatio: '1' }}>
-                        <img src={product.image} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </div>
-
-                    {/* Info */}
-                    <div>
-                        {product.subtitle && <div style={{ fontSize: '0.68rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#C9A96E', marginBottom: 12 }}>{product.subtitle}</div>}
-                        <h1 style={{ fontFamily: serif, fontSize: 'clamp(2rem, 3.5vw, 3rem)', color: '#2C1810', margin: '0 0 16px', fontWeight: 600, lineHeight: 1.1 }}>{product.title}</h1>
-
-                        {/* Price */}
-                        <div style={{ fontSize: '1.8rem', fontWeight: 700, color: '#a07840', marginBottom: 28 }}>
-                            ${selectedVariant ? selectedVariant.price.toFixed(2) : product.price.toFixed(2)}
-                        </div>
-
-                        {/* Tags */}
-                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24, paddingBottom: 24, borderBottom: '1px solid #e8d8ca' }}>
+            <div className="px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+                {/* ── Image Gallery (Column 1) ── */}
+                <div className="space-y-6">
+                    <div className="aspect-square rounded-[3rem] overflow-hidden shadow-premium border-8 border-white dark:border-background-dark relative group">
+                        <img
+                            src={product.image}
+                            alt={product.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute top-8 left-8 flex flex-col gap-3">
                             {product.tags.map(t => (
-                                <span key={t} style={{ background: '#f5ecd8', color: '#6b4c35', fontSize: '0.7rem', letterSpacing: '0.08em', padding: '4px 12px', borderRadius: 20, border: '1px solid #e8d8ca' }}>{t}</span>
+                                <span key={t} className="bg-white/95 dark:bg-black/80 backdrop-blur-xl px-4 py-1.5 rounded-full text-[10px] lg:text-xs font-bold text-primary dark:text-accent tracking-widest shadow-lg border border-secondary/10">
+                                    {t.toUpperCase()}
+                                </span>
                             ))}
                         </div>
+                    </div>
+                </div>
 
-                        {/* Description */}
-                        <p style={{ fontSize: '0.9rem', color: '#6b4c35', lineHeight: 1.85, marginBottom: 32, paddingBottom: 32, borderBottom: '1px solid #e8d8ca' }}>
-                            {product.description}
-                        </p>
+                {/* ── Product Info (Column 2) ── */}
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="flex text-accent gap-0.5">
+                            {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+                        </div>
+                        <a href="#reviews" className="text-xs font-bold text-text-light/40 hover:text-primary transition-colors uppercase tracking-[0.2em]">(2,400+ Trusted Reviews)</a>
+                    </div>
 
-                        {/* Variant Selector */}
-                        {product.variants.length > 1 && (
-                            <div style={{ marginBottom: 24 }}>
-                                <div style={{ fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#2C1810', fontWeight: 600, marginBottom: 12 }}>Select Size</div>
-                                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                                    {product.variants.map(v => (
-                                        <button key={v.id} onClick={() => setSelectedVariant(v)} style={{
-                                            padding: '10px 18px', borderRadius: 2, cursor: 'pointer', fontFamily: sans,
-                                            fontSize: '0.85rem', fontWeight: 500,
-                                            background: selectedVariant?.id === v.id ? '#2C1810' : '#fff',
-                                            color: selectedVariant?.id === v.id ? '#C9A96E' : '#2C1810',
-                                            border: `1px solid ${selectedVariant?.id === v.id ? '#2C1810' : '#e8d8ca'}`,
-                                            transition: 'all 0.15s',
-                                        }}>
-                                            {v.label} — ${v.price.toFixed(2)}
-                                        </button>
-                                    ))}
-                                </div>
+                    <h1 className="text-4xl lg:text-6xl font-display font-bold text-primary dark:text-white mb-3 leading-[1.1]">
+                        {product.title}
+                    </h1>
+
+                    <p className="text-xs lg:text-sm text-accent font-bold uppercase tracking-[0.3em] mb-8">
+                        {product.subtitle || 'DEAR SWEET SIGNATURE'}
+                    </p>
+
+                    <div className="text-4xl lg:text-5xl font-bold text-primary dark:text-white mb-8">
+                        ${(selectedVariant?.price || product.price).toFixed(2)}
+                    </div>
+
+                    <p className="text-sm lg:text-lg text-text-light/70 dark:text-text-dark/70 leading-relaxed mb-10 border-l-4 border-accent/20 pl-6 py-2 italic bg-primary/5 rounded-r-2xl pr-6">
+                        {product.description}
+                    </p>
+
+                    {/* ── Variants ── */}
+                    {product.variants.length > 1 && (
+                        <div className="mb-10">
+                            <h3 className="text-[10px] lg:text-xs font-bold text-text-light/40 uppercase tracking-[0.2em] mb-6">Select Pack Size</h3>
+                            <div className="grid grid-cols-2 gap-4">
+                                {product.variants.map(v => (
+                                    <button
+                                        key={v.id}
+                                        onClick={() => setSelectedVariant(v)}
+                                        className={`py-5 px-6 rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-2 ${selectedVariant?.id === v.id
+                                            ? 'border-primary bg-primary/5 dark:bg-primary/20 scale-[1.05] shadow-md'
+                                            : 'border-secondary/10 bg-white dark:bg-surface-dark hover:border-primary/50'
+                                            }`}
+                                    >
+                                        <span className={`text-sm lg:text-base font-bold ${selectedVariant?.id === v.id ? 'text-primary dark:text-white' : 'text-text-light/60'}`}>
+                                            {v.label}
+                                        </span>
+                                        <span className="text-xs font-bold opacity-60">
+                                            ${v.price.toFixed(2)}
+                                        </span>
+                                    </button>
+                                ))}
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Quantity */}
-                        <div style={{ marginBottom: 24 }}>
-                            <div style={{ fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#2C1810', fontWeight: 600, marginBottom: 12 }}>Quantity</div>
-                            <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #e8d8ca', borderRadius: 2, width: 'fit-content' }}>
-                                <button onClick={() => setQty(q => Math.max(1, q - 1))} style={{ width: 42, height: 42, background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: '#2C1810', fontFamily: sans }}>−</button>
-                                <span style={{ width: 42, textAlign: 'center', fontWeight: 600, color: '#2C1810' }}>{qty}</span>
-                                <button onClick={() => setQty(q => q + 1)} style={{ width: 42, height: 42, background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: '#2C1810', fontFamily: sans }}>+</button>
+                    {/* ── Quantity & Add (Desktop Integrated) ── */}
+                    <div className="hidden lg:flex flex-col gap-6 mb-12">
+                        <div className="flex items-center justify-between bg-white dark:bg-surface-dark p-5 rounded-3xl border border-secondary/10 shadow-soft">
+                            <span className="text-sm font-bold text-text-light/50 ml-2 uppercase tracking-widest">Quantity</span>
+                            <div className="flex items-center gap-8">
+                                <button
+                                    onClick={() => setQty(q => Math.max(1, q - 1))}
+                                    className="w-12 h-12 rounded-full border-2 border-secondary/10 flex items-center justify-center text-primary font-bold hover:bg-primary hover:text-white transition-all active:scale-90"
+                                >
+                                    <span className="text-2xl">−</span>
+                                </button>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={qty}
+                                    onChange={(e) => {
+                                        const val = parseInt(e.target.value, 10);
+                                        if (!isNaN(val) && val > 0) setQty(val);
+                                        else if (e.target.value === '') setQty('');
+                                    }}
+                                    onBlur={(e) => {
+                                        if (qty === '' || isNaN(qty) || qty < 1) setQty(1);
+                                    }}
+                                    className="font-bold text-2xl w-[60px] text-center bg-transparent border-none outline-none p-0 cart-qty-input"
+                                />
+                                <button
+                                    onClick={() => setQty(q => q + 1)}
+                                    className="w-12 h-12 rounded-full border-2 border-secondary/10 flex items-center justify-center text-primary font-bold hover:bg-primary hover:text-white transition-all active:scale-90"
+                                >
+                                    <span className="text-2xl">+</span>
+                                </button>
                             </div>
                         </div>
 
-                        {/* Buttons */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                            <button onClick={handleAdd} style={{
-                                width: '100%', background: added ? '#2C1810' : '#C9A96E', color: added ? '#C9A96E' : '#2C1810',
-                                border: 'none', borderRadius: 2, padding: '16px', fontSize: '0.82rem',
-                                fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase',
-                                cursor: 'pointer', fontFamily: sans,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                                transition: 'background 0.3s',
-                            }}>
-                                <ShoppingBag size={18} />
-                                {added ? '✓ Added to Cart!' : `Add to Cart — $${((selectedVariant?.price || product.price) * qty).toFixed(2)}`}
-                            </button>
+                        {/* Playful Brand Voice */}
+                        <div className="flex justify-center -mb-2">
+                            <span className="text-accent text-[10px] font-bold uppercase tracking-[0.2em] bg-accent/5 px-4 py-1 rounded-full border border-accent/10">
+                                🤫 Sharing is optional
+                            </span>
+                        </div>
 
-                            {/* Stripe Buy Now (shows if stripeLink is set) */}
-                            {(product.stripeLink || selectedVariant?.stripeLink) && (
-                                <button onClick={handleBuyNow} style={{
-                                    width: '100%', background: '#635BFF', color: '#fff',
-                                    border: 'none', borderRadius: 2, padding: '14px', fontSize: '0.82rem',
-                                    fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-                                    cursor: 'pointer', fontFamily: sans,
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                                }}>
-                                    <ExternalLink size={16} /> Buy Now via Stripe
-                                </button>
-                            )}
+                        <button
+                            onClick={handleAdd}
+                            disabled={added}
+                            className={`w-full h-20 rounded-3xl font-display font-bold text-lg tracking-[0.2em] uppercase flex items-center justify-center gap-4 shadow-xl transition-all active:scale-95 ${added
+                                ? 'bg-emerald-500 text-white shadow-emerald-200'
+                                : 'bg-primary text-white shadow-primary/30 hover:bg-primary/90'
+                                }`}
+                        >
+                            <ShoppingBag size={24} />
+                            {added ? '✓ Added to Box' : `Add to Cart • $${((selectedVariant?.price || product.price) * qty).toFixed(2)}`}
+                        </button>
+                    </div>
+
+                    {/* ── Mobile Quantity (Visible only on mobile) ── */}
+                    <div className="lg:hidden flex items-center justify-between mb-10 bg-white dark:bg-surface-dark p-4 rounded-[2rem] border border-secondary/10 shadow-soft">
+                        <span className="text-xs font-bold text-text-light/50 ml-2 uppercase tracking-widest">Quantity</span>
+                        <div className="flex items-center gap-6">
+                            <button
+                                onClick={() => setQty(q => Math.max(1, q - 1))}
+                                className="w-10 h-10 rounded-full border border-secondary/10 flex items-center justify-center text-primary font-bold active:scale-90"
+                            >
+                                <span className="text-xl">−</span>
+                            </button>
+                            <input
+                                type="number"
+                                min="1"
+                                value={qty}
+                                onChange={(e) => {
+                                    const val = parseInt(e.target.value, 10);
+                                    if (!isNaN(val) && val > 0) setQty(val);
+                                    else if (e.target.value === '') setQty('');
+                                }}
+                                onBlur={(e) => {
+                                    if (qty === '' || isNaN(qty) || qty < 1) setQty(1);
+                                }}
+                                className="font-bold text-lg w-[40px] text-center bg-transparent border-none outline-none p-0 cart-qty-input"
+                            />
+                            <button
+                                onClick={() => setQty(q => q + 1)}
+                                className="w-10 h-10 rounded-full border border-secondary/10 flex items-center justify-center text-primary font-bold active:scale-90"
+                            >
+                                <span className="text-xl">+</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* ── Trust Badges ── */}
+                    <div className="grid grid-cols-3 gap-4 lg:gap-6 mb-10">
+                        <div className="flex flex-col items-center gap-3 p-5 bg-white dark:bg-surface-dark border border-secondary/5 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
+                            <ShieldCheck size={24} className="text-primary" />
+                            <span className="text-[10px] font-bold text-text-light/50 uppercase tracking-widest text-center">Handmade Fresh</span>
+                        </div>
+                        <div className="flex flex-col items-center gap-3 p-5 bg-white dark:bg-surface-dark border border-secondary/5 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
+                            <Truck size={24} className="text-primary" />
+                            <span className="text-[10px] font-bold text-text-light/50 uppercase tracking-widest text-center">Express Shipping</span>
+                        </div>
+                        <div className="flex flex-col items-center gap-3 p-5 bg-white dark:bg-surface-dark border border-secondary/5 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
+                            <RotateCcw size={24} className="text-primary" />
+                            <span className="text-[10px] font-bold text-text-light/50 uppercase tracking-widest text-center">Fresh Guarantee</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <style>{`
-                @media (max-width: 768px) { .product-detail-grid { grid-template-columns: 1fr !important; gap: 32px !important; } }
-            `}</style>
+            {/* ── Product Reviews Section ── */}
+            <div className="px-6">
+                <ProductReviews productId={product.id} />
+            </div>
+
+            {/* ── Mobile Add to Cart Bar (Hidden on Desktop) ── */}
+            <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-surface-dark/95 backdrop-blur-xl border-t border-secondary/10 p-4 pb-safe z-40">
+                <div className="max-w-md mx-auto">
+                    <button
+                        onClick={handleAdd}
+                        disabled={added}
+                        className={`w-full h-16 rounded-2xl font-display font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-3 shadow-lg transition-all active:scale-95 ${added
+                            ? 'bg-emerald-500 text-white'
+                            : 'bg-primary text-white shadow-primary/30'
+                            }`}
+                    >
+                        <ShoppingBag size={20} />
+                        {added ? '✓ Added!' : `Add • $${((selectedVariant?.price || product.price) * qty).toFixed(2)}`}
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

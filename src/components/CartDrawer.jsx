@@ -33,11 +33,18 @@ export default function CartDrawer() {
 
         setIsRedirecting(true);
         try {
+            // Save pending order for purchase verification on success redirect
+            const productIds = items.map(i => i.product.id);
+            localStorage.setItem('pending_order', JSON.stringify(productIds));
+
             const response = await fetch('/api/create-checkout-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    items,
+                    items: items.filter(i => {
+                        const q = typeof i.quantity === 'number' ? i.quantity : parseInt(i.quantity, 10);
+                        return !isNaN(q) && q > 0;
+                    }),
                     deliveryMethod,
                     shippingFee,
                     metadata: {
@@ -116,13 +123,32 @@ export default function CartDrawer() {
                                             <div style={{ fontFamily: serif, fontSize: '0.95rem', color: '#2C1810', fontWeight: 600, marginBottom: 2 }}>{product.title}</div>
                                             <div style={{ fontSize: '0.72rem', color: '#a07840', marginBottom: 8 }}>{variant.label}</div>
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #e8d8ca', borderRadius: 4 }}>
-                                                    <button onClick={() => updateQuantity(variant.id, quantity - 1)} style={{ width: 24, height: 24, background: 'none', border: 'none', cursor: 'pointer', color: '#2C1810', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                        <Minus size={10} />
+                                                <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #e8d8ca', borderRadius: 4, background: '#fff' }}>
+                                                    <button onClick={() => updateQuantity(variant.id, Math.max(0, (typeof quantity === 'number' ? quantity : (parseInt(quantity, 10) || 0)) - 1))} style={{ width: 28, height: 28, background: 'none', border: 'none', cursor: 'pointer', color: '#2C1810', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Minus size={12} />
                                                     </button>
-                                                    <span style={{ width: 24, textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: '#2C1810' }}>{quantity}</span>
-                                                    <button onClick={() => updateQuantity(variant.id, quantity + 1)} style={{ width: 24, height: 24, background: 'none', border: 'none', cursor: 'pointer', color: '#2C1810', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                        <Plus size={10} />
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        value={quantity}
+                                                        onChange={(e) => {
+                                                            const val = parseInt(e.target.value, 10);
+                                                            if (!isNaN(val) && val >= 0) {
+                                                                updateQuantity(variant.id, val);
+                                                            } else if (e.target.value === '') {
+                                                                updateQuantity(variant.id, '');
+                                                            }
+                                                        }}
+                                                        onBlur={(e) => {
+                                                            if (quantity === '' || isNaN(quantity)) {
+                                                                updateQuantity(variant.id, 0);
+                                                            }
+                                                        }}
+                                                        style={{ width: 36, textAlign: 'center', fontSize: '0.85rem', fontWeight: 700, color: '#2C1810', border: 'none', background: 'transparent', outline: 'none', padding: 0 }}
+                                                        className="cart-qty-input"
+                                                    />
+                                                    <button onClick={() => updateQuantity(variant.id, (typeof quantity === 'number' ? quantity : (parseInt(quantity, 10) || 0)) + 1)} style={{ width: 28, height: 28, background: 'none', border: 'none', cursor: 'pointer', color: '#2C1810', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Plus size={12} />
                                                     </button>
                                                 </div>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -211,6 +237,13 @@ export default function CartDrawer() {
                             </div>
                         </div>
 
+                        {/* Playful Brand Voice */}
+                        <div style={{ textAlign: 'center', marginBottom: 16 }}>
+                            <p style={{ margin: 0, fontSize: '0.7rem', color: '#a07840', fontStyle: 'italic', fontWeight: 500 }}>
+                                "It's all mine! ...Until you share."
+                            </p>
+                        </div>
+
                         <button
                             onClick={handleStripeCheckout}
                             disabled={!isMinimumMet || isRedirecting}
@@ -231,7 +264,17 @@ export default function CartDrawer() {
                         </button>
                     </div>
                 )}
-                <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+                <style>{`
+                    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                    .cart-qty-input::-webkit-outer-spin-button,
+                    .cart-qty-input::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                    .cart-qty-input[type=number] {
+                        -moz-appearance: textfield;
+                    }
+                `}</style>
             </div>
         </>
     );

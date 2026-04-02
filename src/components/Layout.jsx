@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import CartDrawer from './CartDrawer';
 import LoginModal from './auth/LoginModal';
 import { ShoppingBag, Menu as MenuIcon, X, LogOut, User } from 'lucide-react';
+import { db } from '../services/firebase';
+import { doc, setDoc, arrayUnion } from 'firebase/firestore';
 
 export default function Layout() {
     const { openCart, totalItems } = useCart();
@@ -20,6 +22,33 @@ export default function Layout() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
+    // Record purchase into Firebase from localStorage pending_order
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (queryParams.get('success') === 'true' && user) {
+            const pendingOrderStr = localStorage.getItem('pending_order');
+            if (pendingOrderStr) {
+                try {
+                    const productIds = JSON.parse(pendingOrderStr);
+                    if (Array.isArray(productIds) && productIds.length > 0) {
+                        const purchasesRef = doc(db, 'purchases', user.uid);
+                        setDoc(purchasesRef, {
+                            items: arrayUnion(...productIds),
+                            updatedAt: new Date().toISOString()
+                        }, { merge: true })
+                            .then(() => {
+                                localStorage.removeItem('pending_order');
+                                console.log('Purchase recorded for reviews!');
+                            })
+                            .catch(err => console.error('Error recording purchase:', err));
+                    }
+                } catch (e) {
+                    console.error('Error parsing pending order', e);
+                }
+            }
+        }
+    }, [user]);
+
     const navLinks = [
         { to: '/', label: 'Home' },
         { to: '/menu', label: 'Shop' },
@@ -28,136 +57,113 @@ export default function Layout() {
     ];
 
     return (
-        <div className="min-h-screen flex flex-col" style={{ fontFamily: "'Manrope', system-ui, sans-serif", background: '#FDF6EC', color: '#2C1810' }}>
+        <div className="min-h-screen flex flex-col font-body bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark transition-colors duration-300">
 
             {/* ── Header ── */}
-            <header style={{
-                position: 'sticky', top: 0, zIndex: 100,
-                background: scrolled ? 'rgba(44,24,16,0.97)' : '#2C1810',
-                backdropFilter: scrolled ? 'blur(12px)' : 'none',
-                borderBottom: '1px solid rgba(201,169,110,0.15)',
-                transition: 'background 0.3s ease',
-            }}>
-                <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 68 }}>
+            <header className={`sticky top-0 z-50 transition-all duration-300 border-b ${scrolled
+                ? 'bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-secondary/20 dark:border-white/10'
+                : 'bg-transparent border-transparent'
+                }`}>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 sm:h-20">
 
-                    {/* Logo */}
-                    <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-                        <img src="/logo_gold.png" alt="Dear Sweet LLC" style={{ height: 50, width: 'auto', objectFit: 'contain' }} />
+                    {/* Mobile Menu Toggle (Left) */}
+                    <button
+                        onClick={() => setMobileOpen(!mobileOpen)}
+                        className="p-2 rounded-full hover:bg-secondary/10 dark:hover:bg-white/5 transition-colors sm:hidden"
+                    >
+                        <MenuIcon className="text-primary dark:text-secondary" size={24} />
+                    </button>
+
+                    {/* Logo (Center on mobile, Left on desktop) */}
+                    <Link to="/" className="flex items-center">
+                        <img src="/logo_gold.png" alt="Dear Sweet LLC" className="h-10 sm:h-12 w-auto object-contain" />
                     </Link>
 
-                    {/* Desktop Nav */}
-                    <nav style={{ display: 'flex', gap: 36 }} className="hidden-mobile">
+                    {/* Desktop Nav (Center) */}
+                    <nav className="hidden sm:flex items-center gap-8">
                         {navLinks.map(({ to, label }) => (
-                            <NavLink key={to} to={to} end={to === '/'} style={({ isActive }) => ({
-                                textDecoration: 'none',
-                                fontSize: '0.8rem',
-                                fontWeight: 500,
-                                letterSpacing: '0.15em',
-                                textTransform: 'uppercase',
-                                color: isActive ? '#C9A96E' : 'rgba(253,246,236,0.75)',
-                                transition: 'color 0.2s',
-                            })}>
+                            <NavLink
+                                key={to}
+                                to={to}
+                                end={to === '/'}
+                                className={({ isActive }) => `
+                                    text-[13px] font-bold tracking-[0.2em] uppercase transition-colors
+                                    ${isActive ? 'text-primary' : 'text-text-light/60 dark:text-text-dark/60 hover:text-primary'}
+                                `}
+                            >
                                 {label}
                             </NavLink>
                         ))}
                     </nav>
 
-                    {/* Right: Auth + Cart + Mobile */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-
-                        {/* Login / User */}
+                    {/* Right Tools: Auth + Cart */}
+                    <div className="flex items-center gap-2 sm:gap-4">
+                        {/* User Profile / Login */}
                         {user ? (
-                            <div style={{ position: 'relative' }}>
-                                <button onClick={() => setShowUserMenu(!showUserMenu)} style={{
-                                    background: 'rgba(201,169,110,0.15)', border: '1px solid rgba(201,169,110,0.3)',
-                                    borderRadius: '50%', width: 36, height: 36, cursor: 'pointer',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
-                                }}>
-                                    {user.photoURL
-                                        ? <img src={user.photoURL} alt="avatar"
-                                            referrerPolicy="no-referrer"
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                            onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                                        />
-                                        : null}
-                                    <span style={{ display: user.photoURL ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-                                        <User size={16} color="#C9A96E" />
-                                    </span>
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowUserMenu(!showUserMenu)}
+                                    className="p-1 rounded-full border-2 border-primary/20 hover:border-primary/40 transition-all overflow-hidden w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-surface-light dark:bg-surface-dark"
+                                >
+                                    {user.photoURL ? (
+                                        <img src={user.photoURL} alt="avatar" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <User className="text-primary" size={20} />
+                                    )}
                                 </button>
                                 {showUserMenu && (
-                                    <div style={{
-                                        position: 'absolute', top: 'calc(100% + 10px)', right: 0, zIndex: 200,
-                                        background: '#fff', border: '1px solid #e8d8ca', borderRadius: 4,
-                                        padding: '8px 0', minWidth: 180, boxShadow: '0 8px 24px rgba(44,24,16,0.12)',
-                                    }}>
-                                        <div style={{ padding: '10px 16px', borderBottom: '1px solid #f5ecd8' }}>
-                                            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#2C1810' }}>{user.displayName || 'Guest'}</div>
-                                            <div style={{ fontSize: '0.72rem', color: '#a07840' }}>{user.email}</div>
+                                    <div className="absolute top-full mt-2 right-0 w-48 bg-surface-light dark:bg-surface-dark border border-secondary/10 dark:border-white/10 rounded-xl shadow-xl py-2 z-[110]">
+                                        <div className="px-4 py-2 border-b border-secondary/10 dark:border-white/10 mb-1">
+                                            <p className="text-xs font-bold text-primary truncate">{user.displayName || 'Guest'}</p>
+                                            <p className="text-[10px] opacity-60 truncate">{user.email}</p>
                                         </div>
-                                        <button onClick={() => { signOut(); setShowUserMenu(false); }} style={{
-                                            width: '100%', background: 'none', border: 'none', padding: '10px 16px',
-                                            textAlign: 'left', cursor: 'pointer', fontSize: '0.82rem', color: '#6b4c35',
-                                            display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'inherit',
-                                        }}>
+                                        <button
+                                            onClick={() => { signOut(); setShowUserMenu(false); }}
+                                            className="w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold hover:bg-primary/5 transition-colors text-primary"
+                                        >
                                             <LogOut size={14} /> Sign Out
                                         </button>
                                     </div>
                                 )}
                             </div>
                         ) : (
-                            <button onClick={() => setShowLogin(true)} style={{
-                                background: 'none', border: '1px solid rgba(201,169,110,0.4)', borderRadius: 4,
-                                padding: '6px 14px', color: 'rgba(201,169,110,0.9)', fontSize: '0.72rem',
-                                fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
-                                cursor: 'pointer', fontFamily: 'inherit',
-                            }}>
+                            <button
+                                onClick={() => setShowLogin(true)}
+                                className="hidden sm:block text-[11px] font-bold uppercase tracking-widest text-primary hover:text-primary/70 transition-colors"
+                            >
                                 Sign In
                             </button>
                         )}
 
-                        {/* Cart */}
-                        <button onClick={openCart} style={{
-                            position: 'relative', background: 'none', border: 'none', cursor: 'pointer',
-                            color: '#C9A96E', padding: '8px', borderRadius: '50%',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}>
-                            <ShoppingBag size={22} />
+                        {/* Cart Button */}
+                        <button
+                            onClick={openCart}
+                            className="relative p-2 rounded-full hover:bg-secondary/10 dark:hover:bg-white/5 transition-colors"
+                        >
+                            <ShoppingBag className="text-primary dark:text-secondary" size={24} />
                             {totalItems > 0 && (
-                                <span style={{
-                                    position: 'absolute', top: 2, right: 2,
-                                    width: 17, height: 17, borderRadius: '50%',
-                                    background: '#C9A96E', color: '#2C1810',
-                                    fontSize: '0.6rem', fontWeight: 800,
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                }}>
+                                <span className="absolute top-1 right-1 bg-accent text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center border-2 border-background-light dark:border-background-dark">
                                     {totalItems}
                                 </span>
                             )}
                         </button>
-
-                        {/* Mobile Toggle */}
-                        <button onClick={() => setMobileOpen(!mobileOpen)} className="show-mobile" style={{
-                            background: 'none', border: 'none', cursor: 'pointer',
-                            color: '#C9A96E', padding: 8, display: 'none',
-                        }}>
-                            {mobileOpen ? <X size={22} /> : <MenuIcon size={22} />}
-                        </button>
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
+                {/* Mobile Menu Overlay */}
                 {mobileOpen && (
-                    <div style={{
-                        background: '#2C1810', borderTop: '1px solid rgba(201,169,110,0.1)',
-                        padding: '20px 24px 28px',
-                        display: 'flex', flexDirection: 'column', gap: 20,
-                    }}>
+                    <div className="sm:hidden bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-lg border-t border-secondary/10 dark:border-white/10 px-6 py-8 flex flex-col gap-6">
                         {navLinks.map(({ to, label }) => (
-                            <NavLink key={to} to={to} end={to === '/'} onClick={() => setMobileOpen(false)} style={({ isActive }) => ({
-                                textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500,
-                                letterSpacing: '0.15em', textTransform: 'uppercase',
-                                color: isActive ? '#C9A96E' : 'rgba(253,246,236,0.75)',
-                            })}>
+                            <NavLink
+                                key={to}
+                                to={to}
+                                end={to === '/'}
+                                onClick={() => setMobileOpen(false)}
+                                className={({ isActive }) => `
+                                    text-base font-display font-bold uppercase tracking-widest
+                                    ${isActive ? 'text-primary' : 'text-text-light/60 dark:text-text-dark/60'}
+                                `}
+                            >
                                 {label}
                             </NavLink>
                         ))}
@@ -171,51 +177,63 @@ export default function Layout() {
             </main>
 
             {/* ── Footer ── */}
-            <footer style={{ background: '#1a0e09', color: 'rgba(253,246,236,0.6)' }}>
-                <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 40px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 48, marginBottom: 48 }}>
-                        <div>
-                            <Link to="/" style={{ display: 'inline-block', marginBottom: 16 }}>
-                                <img src="/logo_gold.png" alt="Dear Sweet LLC" style={{ height: 56, width: 'auto', objectFit: 'contain' }} />
+            <footer className="bg-surface-dark text-text-dark/60 mt-auto">
+                <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 sm:gap-8">
+                        {/* Brand */}
+                        <div className="flex flex-col gap-6">
+                            <Link to="/">
+                                <img src="/logo_gold.png" alt="Dear Sweet LLC" className="h-14 w-auto object-contain" />
                             </Link>
-                            <p style={{ fontSize: '0.85rem', lineHeight: 1.7 }}>Handcrafted luxury cookies with premium pistachio, kunafa & authentic Dubai flavors.</p>
+                            <p className="text-xs leading-loose max-w-xs">
+                                Handcrafted luxury cookies with premium pistachio, kunafa & authentic Dubai flavors.
+                                Baked with love in Irvine, CA.
+                            </p>
                         </div>
-                        <div>
-                            <div style={{ fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C9A96E', fontWeight: 600, marginBottom: 20 }}>Shop</div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                                <Link to="/menu" style={{ color: 'inherit', textDecoration: 'none', fontSize: '0.85rem' }}>All Cookies</Link>
-                                <Link to="/story" style={{ color: 'inherit', textDecoration: 'none', fontSize: '0.85rem' }}>Our Story</Link>
+
+                        {/* Quick Links */}
+                        <div className="flex flex-col gap-6">
+                            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Shop</h4>
+                            <div className="flex flex-col gap-3">
+                                <Link to="/menu" className="text-xs hover:text-primary transition-colors">All Cookies</Link>
+                                <Link to="/story" className="text-xs hover:text-primary transition-colors">Our Story</Link>
+                                <Link to="/order" className="text-xs hover:text-primary transition-colors">Wholesale</Link>
                             </div>
                         </div>
-                        <div>
-                            <div style={{ fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C9A96E', fontWeight: 600, marginBottom: 20 }}>Contact</div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: '0.85rem' }}>
-                                <span>Irvine, CA, USA</span>
-                                <a href="mailto:info@dearsweetllc.com" style={{ color: 'inherit', textDecoration: 'none' }}>info@dearsweetllc.com</a>
+
+                        {/* Contact */}
+                        <div className="flex flex-col gap-6">
+                            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Contact</h4>
+                            <div className="flex flex-col gap-3 text-xs leading-relaxed">
+                                <p>Irvine, California, USA</p>
+                                <a href="mailto:info@dearsweetllc.com" className="hover:text-primary transition-colors">info@dearsweetllc.com</a>
                             </div>
                         </div>
-                        <div>
-                            <div style={{ fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C9A96E', fontWeight: 600, marginBottom: 20 }}>Stay Updated</div>
-                            <form onSubmit={e => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                                <input type="email" placeholder="your@email.com" style={{
-                                    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(201,169,110,0.3)',
-                                    borderRadius: 4, padding: '10px 14px', color: '#FDF6EC', fontSize: '0.85rem',
-                                    outline: 'none', fontFamily: 'inherit',
-                                }} />
-                                <button type="submit" style={{
-                                    background: '#C9A96E', color: '#2C1810', border: 'none',
-                                    borderRadius: 4, padding: '10px', fontSize: '0.75rem',
-                                    fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-                                    cursor: 'pointer',
-                                }}>Subscribe</button>
+
+                        {/* Newsletter */}
+                        <div className="flex flex-col gap-6">
+                            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Stay Sweet</h4>
+                            <form onSubmit={e => e.preventDefault()} className="flex flex-col gap-3">
+                                <input
+                                    type="email"
+                                    placeholder="your@email.com"
+                                    className="bg-black/20 border border-white/5 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-primary/50 transition-all font-body"
+                                />
+                                <button className="bg-primary text-white text-[10px] items-center font-bold uppercase tracking-widest px-6 py-3 rounded-xl hover:bg-primary/90 transition-all">
+                                    Subscribe
+                                </button>
                             </form>
                         </div>
                     </div>
-                    <div style={{ borderTop: '1px solid rgba(201,169,110,0.1)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.72rem', letterSpacing: '0.08em', flexWrap: 'wrap', gap: 12 }}>
-                        <span>© 2026 Dear Sweet LLC. All rights reserved.</span>
-                        <div style={{ display: 'flex', gap: 20 }}>
-                            <span style={{ cursor: 'pointer' }}>Privacy Policy</span>
-                            <span style={{ cursor: 'pointer' }}>Terms of Service</span>
+
+                    {/* Bottom */}
+                    <div className="border-t border-white/5 mt-16 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] tracking-wider uppercase font-bold">
+                        <p>© 2026 Dear Sweet LLC. All rights reserved.</p>
+                        <div className="flex flex-wrap justify-center sm:justify-end gap-x-8 gap-y-2">
+                            <Link to="/privacy" className="hover:text-primary transition-colors">Privacy</Link>
+                            <Link to="/terms" className="hover:text-primary transition-colors">Terms</Link>
+                            <Link to="/refund" className="hover:text-primary transition-colors">Refund Policy</Link>
+                            <Link to="/shipping" className="hover:text-primary transition-colors">Shipping Info</Link>
                         </div>
                     </div>
                 </div>
@@ -223,17 +241,6 @@ export default function Layout() {
 
             <CartDrawer />
             {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
-
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap');
-                @media (max-width: 768px) {
-                    .hidden-mobile { display: none !important; }
-                    .show-mobile { display: flex !important; }
-                }
-                @media (min-width: 769px) {
-                    .show-mobile { display: none !important; }
-                }
-            `}</style>
         </div>
     );
 }

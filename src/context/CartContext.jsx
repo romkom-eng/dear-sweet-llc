@@ -90,10 +90,7 @@ export function CartProvider({ children }) {
     };
 
     const updateQuantity = (variantId, quantity) => {
-        if (quantity <= 0) {
-            removeItem(variantId);
-            return;
-        }
+        // We no longer remove items automatically when quantity <= 0 so the user can clear the input visually.
         setItems(prev =>
             prev.map(i => i.variant.id === variantId ? { ...i, quantity } : i)
         );
@@ -101,8 +98,14 @@ export function CartProvider({ children }) {
 
     const clearCart = () => setItems([]);
 
-    const totalItems = items.reduce((t, i) => t + i.quantity, 0);
-    const subtotal = items.reduce((t, i) => t + i.variant.price * i.quantity, 0);
+    const totalItems = items.reduce((t, i) => {
+        const qty = typeof i.quantity === 'number' ? i.quantity : (parseInt(i.quantity, 10) || 0);
+        return t + qty;
+    }, 0);
+    const subtotal = items.reduce((t, i) => {
+        const qty = typeof i.quantity === 'number' ? i.quantity : (parseInt(i.quantity, 10) || 0);
+        return t + i.variant.price * qty;
+    }, 0);
 
     return (
         <CartContext.Provider value={{

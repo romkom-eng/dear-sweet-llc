@@ -5,6 +5,20 @@
 
 export const PRODUCTS = [
     {
+        id: 'mm-chocolate-bagel',
+        title: 'M&M Chocolate Bagel',
+        subtitle: 'Melted M&Ms Inside',
+        price: 4.50,
+        description:
+            'A rich, soft chocolate bagel with colorful M&M candies baked right inside. Each bite is loaded with gooey, melted chocolate from the M&Ms, creating an indulgent treat that\'s sweet, chewy, and completely irresistible. A fan-favorite for chocolate lovers of all ages.',
+        tags: ['Chocolate', 'M&M', 'Bagel'],
+        image: '/bagel_chocolate_mm.png',
+        variants: [
+            { id: 'bagel-1', label: '1 Bagel', price: 4.50 },
+            { id: 'bagel-6', label: '6-Pack Box', price: 24.99 },
+        ],
+    },
+    {
         id: 'original-dubai-chewy',
         title: 'Original Dubai Chewy Cookie',
         subtitle: 'The Classic',
