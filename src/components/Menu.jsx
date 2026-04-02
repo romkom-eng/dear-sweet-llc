@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { PRODUCTS } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { ShoppingBag, Search, Star, Heart, Sliders, ChevronRight, User } from 'lucide-react';
@@ -7,11 +7,39 @@ import { ShoppingBag, Search, Star, Heart, Sliders, ChevronRight, User } from 'l
 export default function Menu() {
     const [search, setSearch] = useState('');
     const { addItem, openCart } = useCart();
+    const location = useLocation();
+    const navigate = useNavigate();
+    
+    // Check URL parameters for predefined filters
+    const urlParams = new URLSearchParams(location.search);
+    const filterParam = urlParams.get('filter') || '';
 
-    const filtered = PRODUCTS.filter(p =>
-        p.title.toLowerCase().includes(search.toLowerCase()) ||
-        p.tags.some(t => t.toLowerCase().includes(search.toLowerCase()))
-    );
+    const handleFilterClick = (f) => {
+        if (f) navigate(`/menu?filter=${f}`);
+        else navigate('/menu');
+    };
+
+    const categories = [
+        { id: '', label: 'All Sweets' },
+        { id: 'original', label: 'Original Dubai Chewy' },
+        { id: 'strawberry', label: 'Strawberry Dubai Chewy' },
+        { id: 'bagel', label: 'Bagel' },
+    ];
+
+    const filtered = PRODUCTS.filter(p => {
+        const matchSearch = p.title.toLowerCase().includes(search.toLowerCase()) ||
+                            p.tags.some(t => t.toLowerCase().includes(search.toLowerCase()));
+                            
+        let matchFilter = true;
+        if (filterParam === 'best') matchFilter = p.tags?.includes('Best Seller');
+        if (filterParam === 'new') matchFilter = p.tags?.includes('Fan Favorite') || p.tags?.includes('New');
+        if (filterParam === 'gift') matchFilter = p.variants?.some(v => v.label.includes('Box'));
+        if (filterParam === 'original') matchFilter = p.id === 'original-dubai-chewy';
+        if (filterParam === 'strawberry') matchFilter = p.id === 'strawberry-dubai-chewy';
+        if (filterParam === 'bagel') matchFilter = p.tags?.includes('Bagel');
+
+        return matchSearch && matchFilter;
+    });
 
     const handleAdd = (p) => {
         addItem(p, p.variants[0], 1);
@@ -32,7 +60,7 @@ export default function Menu() {
             </header>
 
             {/* ── Search & Filter ── */}
-            <div className="px-6 mb-12 max-w-3xl mx-auto">
+            <div className="px-6 mb-8 max-w-3xl mx-auto">
                 <div className="flex gap-4">
                     <div className="relative flex-grow">
                         <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-text-light/30" />
@@ -44,14 +72,23 @@ export default function Menu() {
                             className="w-full bg-white dark:bg-surface-dark border border-secondary/10 rounded-2xl py-5 pl-14 pr-6 text-base lg:text-lg focus:outline-none focus:ring-4 focus:ring-primary/5 shadow-soft transition-all placeholder:text-text-light/20"
                         />
                     </div>
-                    <button className="p-5 bg-white dark:bg-surface-dark border border-secondary/10 rounded-2xl shadow-soft text-primary hover:bg-primary hover:text-white transition-all active:scale-95">
-                        <Sliders size={22} />
-                    </button>
                 </div>
             </div>
 
             <div className="flex gap-4 px-6 mb-12 overflow-x-auto pb-2 hide-scrollbar lg:justify-center">
-                <button className="px-8 py-3 bg-primary text-white rounded-full font-bold text-xs lg:text-sm shadow-lg shadow-primary/20 shrink-0">All Sweets</button>
+                {categories.map((cat) => (
+                    <button 
+                        key={cat.id} 
+                        onClick={() => handleFilterClick(cat.id)}
+                        className={`px-6 py-2.5 rounded-full font-bold text-xs lg:text-sm shrink-0 transition-all ${
+                            (filterParam === cat.id || (filterParam === 'best' && cat.id === 'original') || (filterParam === 'new' && cat.id === 'strawberry'))
+                                ? 'bg-primary text-white shadow-lg shadow-primary/20' 
+                                : 'bg-white dark:bg-surface-dark text-text-light/60 dark:text-text-dark/60 hover:text-primary hover:bg-primary/5 border border-secondary/10'
+                        }`}
+                    >
+                        {cat.label}
+                    </button>
+                ))}
             </div>
 
             {/* ── Products List ── */}

@@ -40,7 +40,7 @@ export async function onRequestPost({ request, env }) {
         const body = new URLSearchParams({
             'payment_method_types[]': 'card',
             'mode': 'payment',
-            'success_url': `${new URL(request.url).origin}/?success=true`,
+            'success_url': `${new URL(request.url).origin}/?success=true&session_id={CHECKOUT_SESSION_ID}`,
             'cancel_url': `${new URL(request.url).origin}/?canceled=true`,
             'billing_address_collection': 'auto', // 'required' 도 가능
         });

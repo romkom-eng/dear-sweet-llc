@@ -27,6 +27,13 @@ const BANNERS = [
         cta: 'Shop Gift Sets',
         to: '/menu',
     },
+    {
+        id: 4,
+        image: '/banner4.png',           // Bagel (saved as Strawberry Dubai Chewy Cookie)
+        objectPosition: 'center center',
+        cta: 'Taste the Magic',
+        to: '/product/mm-chocolate-bagel',
+    },
 ];
 
 // ────── Category SVG Illustrations ───────────────────────────────
@@ -142,9 +149,9 @@ const CATEGORIES = [
     { id: 'all',        label: 'All',        to: '/menu' },
     { id: 'original',   label: 'Original',   to: '/product/original-dubai-chewy' },
     { id: 'strawberry', label: 'Strawberry', to: '/product/strawberry-dubai-chewy' },
-    { id: 'giftbox',    label: 'Gift Box',   to: '/menu' },
-    { id: 'new',        label: 'New',        to: '/product/strawberry-dubai-chewy' },
-    { id: 'best',       label: 'Best',       to: '/product/original-dubai-chewy' },
+    { id: 'giftbox',    label: 'Gift Box',   to: '/menu?filter=gift' },
+    { id: 'new',        label: 'New',        to: '/menu?filter=new' },
+    { id: 'best',       label: 'Best',       to: '/menu?filter=best' },
     { id: 'shipping',   label: 'Shipping',   to: '/shipping' },
     { id: 'about',      label: 'Our Story',  to: '/story' },
 ];
@@ -154,6 +161,47 @@ const TABS = ['All', 'Best', 'New', 'Gift'];
 
 export default function Home() {
     const { addItem, openCart } = useCart();
+
+    // Check for checkout success and trigger Google Customer Reviews Opt-in
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const success = urlParams.get('success');
+        const sessionId = urlParams.get('session_id');
+
+        if (success === 'true' && sessionId) {
+            // Clean up the URL to prevent re-triggering upon refresh
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+            fetch('/api/get-checkout-session', {
+                method: 'POST', // using POST to send JSON body
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: sessionId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.email && data.order_id) {
+                    window.renderOptIn = function() {
+                        window.gapi.load('surveyoptin', function() {
+                            window.gapi.surveyoptin.render({
+                                "merchant_id": 5710997340,
+                                "order_id": data.order_id,
+                                "email": data.email,
+                                "delivery_country": data.delivery_country,
+                                "estimated_delivery_date": data.estimated_delivery_date
+                            });
+                        });
+                    };
+
+                    const script = document.createElement('script');
+                    script.src = "https://apis.google.com/js/platform.js?onload=renderOptIn";
+                    script.async = true;
+                    script.defer = true;
+                    document.body.appendChild(script);
+                }
+            })
+            .catch(console.error);
+        }
+    }, []);
 
     // Carousel
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -225,6 +273,14 @@ export default function Home() {
     };
 
     const [activeTab, setActiveTab] = useState('All');
+
+    const getFilteredProducts = () => {
+        if (activeTab === 'Best') return PRODUCTS.filter(p => p.tags?.includes('Best Seller'));
+        if (activeTab === 'New') return PRODUCTS.filter(p => p.tags?.includes('Fan Favorite') || p.tags?.includes('New'));
+        if (activeTab === 'Gift') return PRODUCTS.filter(p => p.variants?.some(v => v.label.includes('Box')));
+        return PRODUCTS;
+    };
+    const displayedProducts = getFilteredProducts();
 
     return (
         <div className="max-w-6xl mx-auto pb-24 font-body scroll-smooth bg-background-light dark:bg-background-dark">
@@ -345,11 +401,14 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ───── Best Sellers ───── */}
+            {/* ───── Best Sellers / Top Picks / New Arrivals ───── */}
             <section className="px-4 py-8">
                 <div className="flex justify-between items-center mb-5">
                     <h2 className="text-xl lg:text-3xl font-display font-bold text-primary dark:text-white flex items-center gap-2">
-                        <CategoryIcon id="best" /><span>Best Sellers</span>
+                        {activeTab === 'All' && <><CategoryIcon id="all" /><span>Explore</span></>}
+                        {activeTab === 'Best' && <><CategoryIcon id="best" /><span>Best Sellers</span></>}
+                        {activeTab === 'New' && <><CategoryIcon id="new" /><span>New Arrivals</span></>}
+                        {activeTab === 'Gift' && <><CategoryIcon id="giftbox" /><span>Gift Sets</span></>}
                     </h2>
                     <Link to="/menu" className="text-[10px] lg:text-xs font-bold text-accent hover:text-primary transition-colors flex items-center gap-1 uppercase tracking-widest">
                         See All <ChevronRight size={14} />
@@ -357,7 +416,7 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                    {PRODUCTS.map(p => (
+                    {displayedProducts.map(p => (
                         <div key={p.id} className="bg-surface-light dark:bg-surface-dark rounded-[1.75rem] p-4 shadow-soft border border-secondary/10 dark:border-white/5 flex flex-col relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                             <button className="absolute top-4 right-4 z-10 p-2 bg-white/90 dark:bg-black/40 backdrop-blur-sm rounded-full text-secondary hover:text-red-400 transition-colors shadow-sm">
                                 <Heart size={14} />
