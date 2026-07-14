@@ -4,31 +4,33 @@
 
 @layer base {
   body {
-    @apply font-body bg-background-light text-text-light antialiased;
+    @apply font-body antialiased;
     min-height: 100vh;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-display tracking-tight;
   }
 }
 
 @layer components {
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+  /* Scrollbar hide utility */
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Gradient Text from Stitch */
+  .gradient-text {
+    background: linear-gradient(135deg, #7d562d 0%, #d4a373 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+  /* Active/Hover squish from Stitch */
+  .squish:active { transform: scale(0.98); }
+  .squish-hover:hover { transform: scale(0.98); }
 }
 
+/* Safe area padding for mobile bottom nav */
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 20px);
 }

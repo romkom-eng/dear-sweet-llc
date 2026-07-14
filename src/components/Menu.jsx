@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { PRODUCTS } from '../data/products';
+import { UPCOMING } from '../data/upcoming';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { ShoppingBag, Search, Star, Heart, Sliders, ChevronRight, User } from 'lucide-react';
 
 export default function Menu() {
     const [search, setSearch] = useState('');
     const { addItem, openCart } = useCart();
+    const { user, signOut, openLogin } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     
@@ -50,7 +53,7 @@ export default function Menu() {
         <div className="max-w-6xl mx-auto pb-24 font-body scroll-smooth">
             {/* ── Page Header ── */}
             <header className="px-6 pt-16 pb-8 text-center max-w-2xl mx-auto">
-                <span className="px-3 py-1 bg-accent/10 text-accent text-[10px] font-bold rounded-full mb-4 uppercase tracking-[0.25em] inline-block">
+                <span className="px-3 py-1 bg-accent/10 text-accent text-[10px] font-bold rounded mb-4 uppercase tracking-[0.25em] inline-block">
                     Freshly Baked
                 </span>
                 <h1 className="text-4xl lg:text-6xl font-display font-bold text-primary dark:text-white mb-4 tracking-tight">Our Menu</h1>
@@ -80,7 +83,7 @@ export default function Menu() {
                     <button 
                         key={cat.id} 
                         onClick={() => handleFilterClick(cat.id)}
-                        className={`px-6 py-2.5 rounded-full font-bold text-xs lg:text-sm shrink-0 transition-all ${
+                        className={`px-6 py-2.5 rounded font-bold text-xs lg:text-sm shrink-0 transition-all ${
                             (filterParam === cat.id || (filterParam === 'best' && cat.id === 'original') || (filterParam === 'new' && cat.id === 'strawberry'))
                                 ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                                 : 'bg-white dark:bg-surface-dark text-text-light/60 dark:text-text-dark/60 hover:text-primary hover:bg-primary/5 border border-secondary/10'
@@ -94,12 +97,12 @@ export default function Menu() {
             {/* ── Products List ── */}
             <div className="px-6 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                 {filtered.length === 0 ? (
-                    <div className="col-span-full text-center py-24 bg-white dark:bg-surface-dark rounded-[2.5rem] border-2 border-dashed border-secondary/20">
+                    <div className="col-span-full text-center py-24 bg-white dark:bg-surface-dark rounded-2xl border-2 border-dashed border-secondary/20">
                         <p className="text-text-light/40 italic text-lg">No flavors found matching "{search}"</p>
                     </div>
                 ) : (
                     filtered.map(p => (
-                        <div key={p.id} className="bg-white dark:bg-surface-dark rounded-[2rem] overflow-hidden shadow-soft border border-secondary/5 flex flex-col sm:flex-row gap-6 p-5 group hover:shadow-xl transition-all border border-secondary/10">
+                        <div key={p.id} className="bg-white dark:bg-surface-dark rounded-xl overflow-hidden shadow-soft border border-secondary/5 flex flex-col sm:flex-row gap-6 p-5 group hover:shadow-xl transition-all border border-secondary/10">
                             <Link to={`/product/${p.id}`} className="shrink-0 w-full sm:w-40 h-48 sm:h-40 rounded-2xl overflow-hidden relative shadow-sm bg-background-light">
                                 <img
                                     src={p.image}
@@ -107,7 +110,7 @@ export default function Menu() {
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
                                 {p.tags[0] && (
-                                    <div className="absolute top-3 left-3 bg-primary/95 text-white text-[8px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                                    <div className="absolute top-3 left-3 bg-primary/95 text-white text-[8px] font-bold px-2.5 py-1 rounded uppercase tracking-widest shadow-lg">
                                         {p.tags[0]}
                                     </div>
                                 )}
@@ -145,10 +148,33 @@ export default function Menu() {
                         </div>
                     ))
                 )}
+                {!search && !filterParam && UPCOMING.map(u => (
+                    <div key={u.id} className="bg-white/60 dark:bg-surface-dark/60 rounded-xl overflow-hidden border-2 border-dashed border-secondary/30 flex flex-col sm:flex-row gap-6 p-5">
+                        <div className="shrink-0 w-full sm:w-40 h-48 sm:h-40 rounded-2xl bg-background-light dark:bg-background-dark flex items-center justify-center text-center px-3 overflow-hidden relative">
+                            {u.image ? (
+                                <img src={u.image} alt={u.title} className="w-full h-full object-cover" />
+                            ) : (
+                                <span className="font-display italic text-text-light/40 dark:text-text-dark/40 text-sm">Photo coming soon</span>
+                            )}
+                        </div>
+                        <div className="flex flex-col flex-grow justify-between py-2">
+                            <div>
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="font-display font-bold text-xl lg:text-2xl text-primary dark:text-white leading-tight">{u.title}</h3>
+                                    <span className="text-[9px] font-bold uppercase tracking-widest text-accent bg-accent/10 px-2.5 py-1 rounded">Coming Soon</span>
+                                </div>
+                                <p className="text-[10px] uppercase tracking-widest font-bold text-secondary/70 mb-3">{u.composition}</p>
+                                <p className="text-xs lg:text-sm text-text-light/60 dark:text-text-dark/40 leading-relaxed mb-4">
+                                    {u.description}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
 
             {/* ── Mobile Tab Bar (Matching Snippet) ── */}
-            <nav className="fixed bottom-0 left-0 right-0 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-lg border-t border-secondary/20 dark:border-white/10 z-50 pb-safe pt-2">
+            <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-lg border-t border-secondary/20 dark:border-white/10 z-50 pb-safe pt-2">
                 <div className="max-w-md mx-auto flex justify-around items-center h-16">
                     <Link to="/" className="flex flex-col items-center justify-center w-16 h-full text-text-light/40 dark:text-text-dark/40 hover:text-primary transition-colors">
                         <Star size={22} className="mb-1" />
@@ -162,10 +188,13 @@ export default function Menu() {
                         <Heart size={22} className="mb-1" />
                         <span className="text-[10px] font-bold">Saved</span>
                     </button>
-                    <Link to="/profile" className="flex flex-col items-center justify-center w-16 h-full text-text-light/40 dark:text-text-dark/40 hover:text-primary transition-colors">
-                        <span className="material-icons mb-1" style={{ fontSize: 22 }}>person</span>
-                        <span className="text-[10px] font-bold">Profile</span>
-                    </Link>
+                    <button
+                        onClick={user ? signOut : openLogin}
+                        className="flex flex-col items-center justify-center w-16 h-full text-text-light/40 dark:text-text-dark/40 hover:text-primary transition-colors"
+                    >
+                        <User size={22} className="mb-1" />
+                        <span className="text-[10px] font-bold">{user ? 'Sign Out' : 'Sign In'}</span>
+                    </button>
                 </div>
             </nav>
         </div>

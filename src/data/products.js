@@ -48,6 +48,20 @@ export const PRODUCTS = [
             { id: 'strawberry-12', label: '12-Pack Box', price: 84.99 },
         ],
     },
+    {
+        id: 'milk-bread',
+        title: 'Milk Bread',
+        subtitle: 'Soft & Buttery',
+        price: 4.50,
+        description:
+            'Pillow-soft milk bread with a delicate, butter-rich crumb, baked low and slow, Hokkaido-style. Sliced and ready to pull apart.',
+        tags: ['New', 'Milk Bread'],
+        image: '/milkbread_whole.jpg',
+        variants: [
+            { id: 'milkbread-1', label: '1 Slice', price: 4.50 },
+            { id: 'milkbread-5', label: '5-Pack', price: 20.00 },
+        ],
+    },
 ];
 
 export const getProductById = (id) => PRODUCTS.find(p => p.id === id);

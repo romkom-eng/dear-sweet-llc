@@ -17,6 +17,9 @@ const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || '';
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const openLogin = () => setShowLoginModal(true);
+    const closeLogin = () => setShowLoginModal(false);
 
     // Save user to Firestore when they log in
     const saveUserToDb = async (firebaseUser) => {
@@ -77,7 +80,7 @@ export function AuthProvider({ children }) {
 
     // Render children immediately — don't block on auth loading
     return (
-        <AuthContext.Provider value={{ user, loading, isAdmin, signInWithGoogle, signInWithEmail, signUpWithEmail, signOut }}>
+        <AuthContext.Provider value={{ user, loading, isAdmin, signInWithGoogle, signInWithEmail, signUpWithEmail, signOut, showLoginModal, openLogin, closeLogin }}>
             {children}
         </AuthContext.Provider>
     );

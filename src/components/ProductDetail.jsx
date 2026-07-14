@@ -51,7 +51,7 @@ export default function ProductDetail() {
             <div className="px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
                 {/* ── Image Gallery (Column 1) ── */}
                 <div className="space-y-6">
-                    <div className="aspect-square rounded-[3rem] overflow-hidden shadow-premium border-8 border-white dark:border-background-dark relative group">
+                    <div className="aspect-square rounded-2xl overflow-hidden shadow-premium border-8 border-white dark:border-background-dark relative group">
                         <img
                             src={product.image}
                             alt={product.title}
@@ -59,7 +59,7 @@ export default function ProductDetail() {
                         />
                         <div className="absolute top-8 left-8 flex flex-col gap-3">
                             {product.tags.map(t => (
-                                <span key={t} className="bg-white/95 dark:bg-black/80 backdrop-blur-xl px-4 py-1.5 rounded-full text-[10px] lg:text-xs font-bold text-primary dark:text-accent tracking-widest shadow-lg border border-secondary/10">
+                                <span key={t} className="bg-white/95 dark:bg-black/80 backdrop-blur-xl px-4 py-1.5 rounded text-[10px] lg:text-xs font-bold text-primary dark:text-accent tracking-widest shadow-lg border border-secondary/10">
                                     {t.toUpperCase()}
                                 </span>
                             ))}
@@ -154,7 +154,7 @@ export default function ProductDetail() {
 
                         {/* Playful Brand Voice */}
                         <div className="flex justify-center -mb-2">
-                            <span className="text-accent text-[10px] font-bold uppercase tracking-[0.2em] bg-accent/5 px-4 py-1 rounded-full border border-accent/10">
+                            <span className="text-accent text-[10px] font-bold uppercase tracking-[0.2em] bg-accent/5 px-4 py-1 rounded border border-accent/10">
                                 🤫 Sharing is optional
                             </span>
                         </div>
@@ -173,7 +173,7 @@ export default function ProductDetail() {
                     </div>
 
                     {/* ── Mobile Quantity (Visible only on mobile) ── */}
-                    <div className="lg:hidden flex items-center justify-between mb-10 bg-white dark:bg-surface-dark p-4 rounded-[2rem] border border-secondary/10 shadow-soft">
+                    <div className="lg:hidden flex items-center justify-between mb-10 bg-white dark:bg-surface-dark p-4 rounded-xl border border-secondary/10 shadow-soft">
                         <span className="text-xs font-bold text-text-light/50 ml-2 uppercase tracking-widest">Quantity</span>
                         <div className="flex items-center gap-6">
                             <button

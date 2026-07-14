@@ -10,10 +10,9 @@ import { doc, setDoc, arrayUnion } from 'firebase/firestore';
 
 export default function Layout() {
     const { openCart, totalItems } = useCart();
-    const { user, signOut } = useAuth();
+    const { user, signOut, showLoginModal, openLogin, closeLogin } = useAuth();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [showLogin, setShowLogin] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
 
     useEffect(() => {
@@ -58,6 +57,27 @@ export default function Layout() {
 
     return (
         <div className="min-h-screen flex flex-col font-body bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark transition-colors duration-300">
+
+            {/* ── Marquee ── */}
+            <div className="bg-background-dark text-background-light overflow-hidden whitespace-nowrap py-2">
+                <div className="inline-flex dsw-marquee-track">
+                    {Array(2).fill(0).map((_, rep) => (
+                        <span key={rep} className="inline-flex items-center">
+                            {['Handmade in Irvine, California', 'Small-Batch, Made to Order', 'Ships Nationwide', 'New: Milk Bread Coming Soon'].map((t, i) => (
+                                <span key={i} className="inline-flex items-center px-6 text-[11px] font-semibold uppercase tracking-[0.14em]">
+                                    {t}
+                                    <span className="ml-6 text-secondary">✦</span>
+                                </span>
+                            ))}
+                        </span>
+                    ))}
+                </div>
+                <style>{`
+                    @keyframes dsw-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+                    .dsw-marquee-track { animation: dsw-scroll 32s linear infinite; }
+                    @media (prefers-reduced-motion: reduce) { .dsw-marquee-track { animation: none; } }
+                `}</style>
+            </div>
 
             {/* ── Header ── */}
             <header className={`sticky top-0 z-50 transition-all duration-300 border-b ${scrolled
@@ -128,7 +148,7 @@ export default function Layout() {
                             </div>
                         ) : (
                             <button
-                                onClick={() => setShowLogin(true)}
+                                onClick={openLogin}
                                 className="hidden sm:block text-[11px] font-bold uppercase tracking-widest text-primary hover:text-primary/70 transition-colors"
                             >
                                 Sign In
@@ -240,7 +260,7 @@ export default function Layout() {
             </footer>
 
             <CartDrawer />
-            {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+            {showLoginModal && <LoginModal onClose={closeLogin} />}
         </div>
     );
 }

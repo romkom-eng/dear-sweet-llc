@@ -99,7 +99,7 @@ export default function Story() {
 
                         {/* Playful Persona Callout */}
                         <div className="bg-primary/5 dark:bg-primary/10 border-2 border-dashed border-primary/20 rounded-3xl p-6 mb-8 relative">
-                            <div className="absolute -top-3 -right-3 bg-accent text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Confidential</div>
+                            <div className="absolute -top-3 -right-3 bg-accent text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Confidential</div>
                             <p className="text-sm font-bold text-primary mb-2 uppercase tracking-tight">Identity: The Cookie Thief</p>
                             <p className="text-slate-600 dark:text-slate-400 italic text-sm italic">"They say I'm a thief... but I only stole the recipe for the perfect stretch. It's all mine! ...Until you share."</p>
                         </div>
@@ -157,7 +157,7 @@ export default function Story() {
             </section>
 
             <section className="py-24 px-6 lg:px-20 text-center">
-                <div className="max-w-3xl mx-auto bg-slate-900 dark:bg-primary/10 rounded-[2rem] p-12 lg:p-20 text-white dark:text-slate-100 overflow-hidden relative">
+                <div className="max-w-3xl mx-auto bg-slate-900 dark:bg-primary/10 rounded-2xl p-12 lg:p-20 text-white dark:text-slate-100 overflow-hidden relative">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -mr-32 -mt-32"></div>
                     <h2 className="text-3xl lg:text-5xl font-bold mb-6 relative z-10">Taste the Crunch Today</h2>
                     <p className="text-slate-300 dark:text-slate-400 mb-10 text-lg relative z-10">Have our legendary **Marshmallow Stretch** Dubai Balls delivered fresh to your door.</p>

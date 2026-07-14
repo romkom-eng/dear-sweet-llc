@@ -133,10 +133,10 @@ export default function Order() {
     return (
         <div className="min-h-screen">
             {/* ── HERO ── */}
-            <section className="relative pt-20 pb-16 px-6 bg-[#2A1F1F] text-white overflow-hidden lg:pt-32">
+            <section className="relative pt-20 pb-16 px-6 bg-background-dark text-white overflow-hidden lg:pt-32">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(212,163,115,0.1),transparent_60%)] pointer-events-none" />
                 <div className="max-w-4xl mx-auto text-center relative z-10">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/30 bg-accent/5 mb-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded border border-accent/30 bg-accent/5 mb-6">
                         <Building2 size={12} className="text-accent" />
                         <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-accent">Wholesale & Business</span>
                     </div>
@@ -213,7 +213,7 @@ export default function Order() {
                         <p className="text-text-light/60">Fill out the form below for a customized wholesale quote within 24 hours.</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-10 p-8 lg:p-12 bg-background-light rounded-[2.5rem] border border-secondary/10 shadow-sm">
+                    <form onSubmit={handleSubmit} className="space-y-10 p-8 lg:p-12 bg-background-light rounded-2xl border border-secondary/10 shadow-sm">
                         {/* Contact */}
                         <div className="space-y-6">
                             <div className="border-b border-secondary/20 pb-2">
